@@ -9,7 +9,7 @@ BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_F
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 
-float timer = 0;
+float timer = 0; // global var to act as starting time at the moment of car jump
 
 void FlipReady::onLoad()
 {
@@ -28,7 +28,7 @@ void FlipReady::onUnload()
 
 void FlipReady::display(CanvasWrapper canvas)
 {
-	// Pre-Logic 
+	// Start Pre-Logic 
 	bool isEnabled = cvarManager->getCvar("flipready_enabled").getBoolValue();
 	
 	if (!isEnabled) {
@@ -44,10 +44,11 @@ void FlipReady::display(CanvasWrapper canvas)
 	if (game.GetCars().Count() == 0) {
 		return;
 	}
+	// End Pre-Logic
 
-	float realTime = game.GetWorldInfo().GetTimeSeconds();
-	float deltaTime = 1.5 + (timer - realTime);
-	auto car = game.GetCars().Get(0);
+	float realTime = game.GetWorldInfo().GetTimeSeconds();  // realtime of server
+	float deltaTime = 1.5 + (timer - realTime);				// difference between realtime and time at moment of jumping
+	auto car = game.GetCars().Get(0);						// user car object
 
 	Vector2 screen = canvas.GetSize();
 	float fontSize = (float)screen.X / (float)1000;
@@ -56,22 +57,24 @@ void FlipReady::display(CanvasWrapper canvas)
 	canvas.SetPosition(Vector2{ int(screen.X * .8), int(screen.Y * .1) });
 
 	std::string flip_str;
-	unsigned long jumped = car.GetbJumped();
+	unsigned long jumped = car.GetbJumped();				// 1 if car jumped and is still in air, 0 otherwise
 	
-	if (!car.HasFlip()) {
+	if (!car.HasFlip()) {									// car does not have accesible flip
 		flip_str = "NO FLIP";
-		canvas.SetColor(200, 0, 0, 255);
+		canvas.SetColor(200, 0, 0, 255);					// set color red
 		canvas.DrawString(flip_str, 2 * fontSize, 2 * fontSize);
 	}
-	else if (jumped) {
-		canvas.SetColor(0, 255, 0, 255);
+	else if (jumped) {										// car jumped and is still in air
+		canvas.SetColor(0, 255, 0, 255);					// set color green
+
+		// indicator gauge is drawn and filled, depletes to empty over 1.5 seconds
 		canvas.DrawBox(Vector2{ int(screen.X * .1), int(screen.Y * .05) });
 		canvas.FillBox(Vector2{ int(screen.X * .1 * (deltaTime/1.5)), int(screen.Y * .05) });
 	}
-	else if (car.HasFlip()) {
+	else if (car.HasFlip()) {								// car has flip but has not jumped
 		flip_str = "FLIP";
-		canvas.SetColor(0, 255, 0, 255);
+		canvas.SetColor(0, 255, 0, 255);					// set color green
 		canvas.DrawString(flip_str, 2 * fontSize, 2 * fontSize);
-		timer = realTime;
+		timer = realTime;									// constantly update timer to realtime while car hasn't jumped
 	}
 }
