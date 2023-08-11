@@ -175,20 +175,20 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			float barLen = barLenCvar.getFloatValue();
 			CVarWrapper barHeightCvar = cvarManager->getCvar("flipready_barheight");
 			float barHeight = barHeightCvar.getFloatValue();
-			float ratio = barLen / barHeight;
+			float barRatio = barLen / barHeight;
 
-			CVarWrapper keepRatioCvar = cvarManager->getCvar("flipready_keepbarratio");
-			static bool keepRatio = keepRatioCvar.getBoolValue();
-			if (ImGui::Checkbox("Maintain Gauge Bar Ratio", &keepRatio)) {
-				keepRatioCvar.setValue(keepRatio);
+			CVarWrapper keepBarRatioCvar = cvarManager->getCvar("flipready_keepbarratio");
+			static bool keepBarRatio = keepBarRatioCvar.getBoolValue();
+			if (ImGui::Checkbox("Maintain Gauge Bar Ratio", &keepBarRatio)) {
+				keepBarRatioCvar.setValue(keepBarRatio);
 			}
 
-			if (ratio != 4.0f) {
+			if (barRatio != 4.0f) {
 				ImGui::SameLine(0.0f, 15.0f);
 				if (ImGui::Button("RESET RATIO", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
-					ratio = 4.0f;
-					barLenCvar.setValue(barHeight * ratio);
-					keepRatio = true;
+					barRatio = 4.0f;
+					barLenCvar.setValue(barHeight * barRatio);
+					keepBarRatio = true;
 				}
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Default: Length:Height = 4:1");
@@ -233,13 +233,13 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 
 			ImGui::SameLine(lineupBars, 0.0f);
 			if (ImGui::SliderFloat("##BarLen", &barLen, 1.0f, 100.0f, "%.1f", 1.0f)) {
-				if (keepRatio) {
-					if (barLen >= ratio) {
+				if (keepBarRatio) {
+					if (barLen >= barRatio) {
 						barLenCvar.setValue(barLen);
-						barHeightCvar.setValue(barLen * (1/ratio));
+						barHeightCvar.setValue(barLen * (1/barRatio));
 					}
 					else {
-						barLenCvar.setValue(ratio);
+						barLenCvar.setValue(barRatio);
 						barHeightCvar.setValue(1);
 					}
 				}
@@ -251,6 +251,8 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barLenCvar.setValue(frstyle_default.bar_len);
+					if (keepBarRatio)
+						barHeightCvar.setValue(frstyle_default.bar_height);
 				}
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Default: 20.0");
@@ -259,14 +261,14 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				ImGui::SameLine(0.0f, 2.0f);
 				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barLenCvar.setValue(ref->bar_len);
-					if (keepRatio) {
-						barHeightCvar.setValue(ref->bar_len * (1/ratio));
+					if (keepBarRatio) {
+						barHeightCvar.setValue(ref->bar_len * (1/barRatio));
 					}
 				}
 				if (ImGui::IsItemHovered()) {
 					std::stringstream prev;
 					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_len;
-					if (keepRatio) {
+					if (keepBarRatio) {
 						prev << " (also height -> " << ref->bar_height << ")";
 					}
 
@@ -283,14 +285,16 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			ImGui::SameLine(lineupBars, 0.0f);
 			if (ImGui::SliderFloat("##BarHeight", &barHeight, 1.0f, 25.0f, "%.1f", 1.0f)) {
 				barHeightCvar.setValue(barHeight);
-				if (keepRatio) {
-					barLenCvar.setValue(barHeight * ratio);
+				if (keepBarRatio) {
+					barLenCvar.setValue(barHeight * barRatio);
 				}
 			}
 			if (barHeight != frstyle_default.bar_height) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barHeightCvar.setValue(frstyle_default.bar_height);
+					if (keepBarRatio)
+						barLenCvar.setValue(frstyle_default.bar_len);
 				}
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Default: 5.0");
@@ -299,14 +303,14 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				ImGui::SameLine(0.0f, 2.0f);
 				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barHeightCvar.setValue(ref->bar_height);
-					if (keepRatio) {
-						barLenCvar.setValue(ref->bar_height * ratio);
+					if (keepBarRatio) {
+						barLenCvar.setValue(ref->bar_height * barRatio);
 					}
 				}
 				if (ImGui::IsItemHovered()) {
 					std::stringstream prev;
 					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_height;
-					if (keepRatio) {
+					if (keepBarRatio) {
 						prev << " (also length -> " << ref->bar_len << ")";
 					}
 

@@ -119,20 +119,28 @@ void FlipReady::Render(CanvasWrapper canvas)
 		else if (posStrX == "right")
 			posY = screen.Y * 0.65;
 		else
-			posY = screen.Y * 0.85;
+			posY = screen.Y * 0.9;
 	else
-		posY = screen.Y * 0.15;
+		posY = screen.Y * 0.1;
 
 	canvas.SetColor(255, 255, 255, 255);
 	canvas.SetPosition(Vector2{ int(posX), int(posY) });
 
+
+	// CORE FUNCTIONALITY
 	std::string flip_str;
 	unsigned long jumped = car.GetbJumped();				// 1 if car jumped and is still in air, 0 otherwise
 	
 	if (!car.HasFlip()) {									// car does not have accesible flip
 		flip_str = "NO FLIP";
 
-		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		if (posStrX == "middle")
+			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		else if (posStrX == "right")
+			posX = posX + (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
+		else
+			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
+
 		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
 
 		canvas.SetColor(colorNoFlipText);					// set color red
@@ -141,8 +149,15 @@ void FlipReady::Render(CanvasWrapper canvas)
 	}
 	else if (jumped) {										// car jumped and is still in air
 		
-		posX -= barLen * 0.5;
-		posY -= barHeight * 0.5;
+		if (posStrX == "middle")
+			posX -= barLen * 0.5;
+		else if (posStrX == "right")
+			posX -= barLen;
+
+		if (posStrY == "middle")
+			posY -= barHeight * 0.5;
+		else if (posStrY == "bottom")
+			posY -= barHeight;
 
 		canvas.SetColor(colorGaugeBar);						// set color green
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
@@ -153,9 +168,17 @@ void FlipReady::Render(CanvasWrapper canvas)
 	else if (car.HasFlip()) {								// car has flip but has not jumped
 		flip_str = "FLIP";
 		
-		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
-		posX += 2.5 * fontSize - 50.0f;
-		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+		if (posStrX == "middle")
+			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		else if (posStrX == "right")
+			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
+		else
+			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
+
+		if (posStrY == "middle")
+			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+		else if (posStrY == "bottom")
+			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
 
 		canvas.SetColor(colorFlipText);					// set color green
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
