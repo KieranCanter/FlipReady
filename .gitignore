@@ -3,6 +3,7 @@
 !.gitignore
 !README.md
 
+!src/
 src/*
 !src/FlipReady.cpp
 !src/FlipReady.h
@@ -11,4 +12,4 @@ src/*
 !src/FlipReady.vcxproj
 !src/FlipReady.vcxproj.filters
 !src/FlipReady.vcxproj.user
-!src/FlipReadySettings
+!src/FlipReadySettings.cpp
