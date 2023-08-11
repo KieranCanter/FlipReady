@@ -14,16 +14,16 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
-	cvarManager->registerCvar("flipready_enabled", "1", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_color_fliptext", "#FF000000", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_color_nofliptext", "#00FF00FF", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_color_gaugebar", "#FF000000", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_fontsize", "20", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_barlen", "20", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_barheight", "5", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_keepbarratio", "1", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_positionx", "middle", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	cvarManager->registerCvar("flipready_positiony", "top", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
+	cvarManager->registerCvar("flipready_color_fliptext", "#FF000000", "Change \"Flip\" text color with hexcode.", true);
+	cvarManager->registerCvar("flipready_color_nofliptext", "#00FF00FF", "Change \"No Flip\" text color with hexcode.", true);
+	cvarManager->registerCvar("flipready_color_gaugebar", "#FF000000", "Change gauge bar color with hexcode.", true, true);
+	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize (1-100).", true, true, 1, true, 100);
+	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length (1-100).", true, true, 1, true, 100);
+	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height (1-25).", true, true, 1, true, 25);
+	cvarManager->registerCvar("flipready_keepbarratio", "1", "1 = maintain bar ratio | 0 = neglect bar ratio.", true, true, 0, true, 1);
+	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position (left|middle|right).", true);
+	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position (top|middle|bottom).", true);
 	
 
 	// TODO CANT HAVE POSITION X AND Y BOTH MIDDLE 
@@ -55,8 +55,12 @@ void FlipReady::Render(CanvasWrapper canvas)
 	if (game.GetCars().Count() == 0) {
 		return;
 	}
+
+	// TODO LOAD IN CVARS AND SET VALUES
+
 	// End Pre-Logic
 
+	// REPLACE BELOW VALUES WITH CVARS AND FIX THE FUCKING SETTINGS
 	float realTime = game.GetWorldInfo().GetTimeSeconds();  // realtime of server
 	static float timer = 0;
 	float deltaTime = 1.5 + (timer - realTime);				// difference between realtime and time at moment of jumping
