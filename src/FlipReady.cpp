@@ -9,15 +9,26 @@ BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_F
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 
-float timer = 0; // global var to act as starting time at the moment of car jump
-
 void FlipReady::onLoad()
 {
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
 	cvarManager->registerCvar("flipready_enabled", "1", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
-	gameWrapper->RegisterDrawable(std::bind(&FlipReady::display, this, std::placeholders::_1));
+	cvarManager->registerCvar("flipready_color_fliptext", "#FF000000", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_color_nofliptext", "#00FF00FF", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_color_gaugebar", "#FF000000", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_fontsize", "20", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_barlen", "20", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_barheight", "5", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_keepbarratio", "1", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_positionx", "middle", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	cvarManager->registerCvar("flipready_positiony", "top", "Enable or Disable FlipReady", true, true, 0, true, 1, true);
+	
+
+	// TODO CANT HAVE POSITION X AND Y BOTH MIDDLE 
+	
+	gameWrapper->RegisterDrawable(std::bind(&FlipReady::Render, this, std::placeholders::_1));
 
 }
 
@@ -26,7 +37,7 @@ void FlipReady::onUnload()
 	LOG("FlipReady unloaded");
 }
 
-void FlipReady::display(CanvasWrapper canvas)
+void FlipReady::Render(CanvasWrapper canvas)
 {
 	// Start Pre-Logic 
 	bool isEnabled = cvarManager->getCvar("flipready_enabled").getBoolValue();
@@ -47,6 +58,7 @@ void FlipReady::display(CanvasWrapper canvas)
 	// End Pre-Logic
 
 	float realTime = game.GetWorldInfo().GetTimeSeconds();  // realtime of server
+	static float timer = 0;
 	float deltaTime = 1.5 + (timer - realTime);				// difference between realtime and time at moment of jumping
 	auto car = game.GetCars().Get(0);						// user car object
 

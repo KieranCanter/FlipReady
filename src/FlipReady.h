@@ -10,7 +10,7 @@ constexpr auto plugin_version = stringify(VERSION_MAJOR) "." stringify(VERSION_M
 
 
 class FlipReady: public BakkesMod::Plugin::BakkesModPlugin
-	//,public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
+	,public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
 	//,public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
@@ -19,7 +19,7 @@ class FlipReady: public BakkesMod::Plugin::BakkesModPlugin
 	//Boilerplate
 	void onLoad() override;
 	void onUnload() override; // Uncomment and implement if you need a unload method
-	void display(CanvasWrapper canvas);
+	void Render(CanvasWrapper canvas);
 
 public:
 	//void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
