@@ -79,6 +79,15 @@ void FlipReady::Render(CanvasWrapper canvas)
 	}
 
 	// TODO LOAD IN CVARS AND SET VALUES
+	LinearColor colorFlipText = cvarManager->getCvar("flipready_color_fliptext").getColorValue();
+	LinearColor colorNoFlipText = cvarManager->getCvar("flipready_color_nofliptext").getColorValue();
+	LinearColor colorGaugeBar = cvarManager->getCvar("flipready_color_gaugebar").getColorValue();
+	float fontSize = cvarManager->getCvar("flipready_fontsize").getFloatValue();
+	float barLen = 10 * cvarManager->getCvar("flipready_barlen").getFloatValue();
+	float barHeight = 10 * cvarManager->getCvar("flipready_barheight").getFloatValue();
+	std::string posStrX = cvarManager->getCvar("flipready_positionx").getStringValue();
+	std::string posStrY = cvarManager->getCvar("flipready_positiony").getStringValue();
+
 
 	// End Pre-Logic
 
@@ -89,30 +98,68 @@ void FlipReady::Render(CanvasWrapper canvas)
 	auto car = game.GetCars().Get(0);						// user car object
 
 	Vector2 screen = canvas.GetSize();
-	float fontSize = (float)screen.X / (float)1000;
-	
+	float exactFontSize = (float)screen.X * 0.0001 * fontSize;
+
+	// Positioning
+	float posX = 0;
+	float posY = 0;
+
+	if (posStrX == "left")
+		posX = screen.X * 0.05;
+	else if (posStrX == "right")
+		posX = screen.X * 0.95;
+	else
+		posX = screen.X * 0.5;
+
+	if (posStrY == "middle")
+		posY = screen.Y * 0.5;
+	else if (posStrY == "bottom")
+		if (posStrX == "left")
+			posY = screen.Y * 0.8;
+		else if (posStrX == "right")
+			posY = screen.Y * 0.65;
+		else
+			posY = screen.Y * 0.85;
+	else
+		posY = screen.Y * 0.15;
+
 	canvas.SetColor(255, 255, 255, 255);
-	canvas.SetPosition(Vector2{ int(screen.X * .8), int(screen.Y * .1) });
+	canvas.SetPosition(Vector2{ int(posX), int(posY) });
 
 	std::string flip_str;
 	unsigned long jumped = car.GetbJumped();				// 1 if car jumped and is still in air, 0 otherwise
 	
 	if (!car.HasFlip()) {									// car does not have accesible flip
 		flip_str = "NO FLIP";
-		canvas.SetColor(200, 0, 0, 255);					// set color red
-		canvas.DrawString(flip_str, 2 * fontSize, 2 * fontSize);
+
+		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+
+		canvas.SetColor(colorNoFlipText);					// set color red
+		canvas.SetPosition(Vector2{ int(posX), int(posY) });
+		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
 	}
 	else if (jumped) {										// car jumped and is still in air
-		canvas.SetColor(0, 255, 0, 255);					// set color green
+		
+		posX -= barLen * 0.5;
+		posY -= barHeight * 0.5;
 
+		canvas.SetColor(colorGaugeBar);						// set color green
+		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		// indicator gauge is drawn and filled, depletes to empty over 1.5 seconds
-		canvas.DrawBox(Vector2{ int(screen.X * .1), int(screen.Y * .05) });
-		canvas.FillBox(Vector2{ int(screen.X * .1 * (deltaTime/1.5)), int(screen.Y * .05) });
+		canvas.DrawBox(Vector2{ int(barLen), int(barHeight)});
+		canvas.FillBox(Vector2{ int(barLen * (deltaTime/1.5)), int(barHeight) });
 	}
 	else if (car.HasFlip()) {								// car has flip but has not jumped
 		flip_str = "FLIP";
-		canvas.SetColor(0, 255, 0, 255);					// set color green
-		canvas.DrawString(flip_str, 2 * fontSize, 2 * fontSize);
+		
+		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		posX += 2.5 * fontSize - 50.0f;
+		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+
+		canvas.SetColor(colorFlipText);					// set color green
+		canvas.SetPosition(Vector2{ int(posX), int(posY) });
+		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
 		timer = realTime;									// constantly update timer to realtime while car hasn't jumped
 	}
 }
