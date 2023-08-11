@@ -78,7 +78,10 @@
     <ClCompile Include="GuiBase.cpp">
       <Filter>Plugin\src</Filter>
     </ClCompile>
-    <ClCompile Include="CoolPlugin.cpp">
+    <ClCompile Include="FlipReady.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipReadySettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,12 +140,12 @@
     <ClInclude Include="GuiBase.h">
       <Filter>Plugin\header</Filter>
     </ClInclude>
-    <ClInclude Include="CoolPlugin.h">
+    <ClInclude Include="FlipReady.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CoolPlugin.rc">
+    <ResourceCompile Include="FlipReady.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "FlipReady.h"
 #include "bakkesmod\wrappers\includes.h"
-#include "utils/parser.h"
 #include "bakkesmod/wrappers/Engine/WorldInfoWrapper.h"
+#include "utils/parser.h"
 
 
 BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_FREEPLAY)
@@ -15,19 +15,41 @@ void FlipReady::onLoad()
 	LOG("FlipReady loaded");
 
 	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
-	cvarManager->registerCvar("flipready_color_fliptext", "#FF000000", "Change \"Flip\" text color with hexcode.", true);
-	cvarManager->registerCvar("flipready_color_nofliptext", "#00FF00FF", "Change \"No Flip\" text color with hexcode.", true);
-	cvarManager->registerCvar("flipready_color_gaugebar", "#FF000000", "Change gauge bar color with hexcode.", true, true);
+	cvarManager->registerCvar("flipready_color_fliptext", "#00FF00FF", "Change \"Flip\" text color with hexcode.", true);
+	cvarManager->registerCvar("flipready_color_nofliptext", "#FF0000FF", "Change \"No Flip\" text color with hexcode.", true);
+	cvarManager->registerCvar("flipready_color_gaugebar", "#00FF00FF", "Change gauge bar color with hexcode.", true, true);
 	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize (1-100).", true, true, 1, true, 100);
-	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length (1-100).", true, true, 1, true, 100);
-	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height (1-25).", true, true, 1, true, 25);
+	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true, true, 1, true, 100);
+	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true, true, 1, true, 25);
 	cvarManager->registerCvar("flipready_keepbarratio", "1", "1 = maintain bar ratio | 0 = neglect bar ratio.", true, true, 0, true, 1);
-	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position (left|middle|right).", true);
-	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position (top|middle|bottom).", true);
+	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position [eft|middle|right].", true);
+	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position [top|middle|bottom].", true);
 	
+	// Don't save value if it isn't a valid position
+	// Cannot have both positions equal middle
+	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "middle" && cvar.getStringValue() != "right") {
+			cvar.setValue(oldval);
+			LOG("Please enter [left|middle|right]");
+		}
+		
+		if (cvar.getStringValue() == "middle" && cvarManager->getCvar("flipready_positiony").getStringValue() == "middle") {
+			cvar.setValue(oldval);
+			LOG("Horizontal position not saved. Both positions can't be middle.");
+		}
+	});
 
-	// TODO CANT HAVE POSITION X AND Y BOTH MIDDLE 
-	
+	cvarManager->getCvar("flipready_positiony").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getStringValue() != "top" && cvar.getStringValue() != "middle" && cvar.getStringValue() != "bottom") {
+			cvar.setValue(oldval);
+			LOG("Please enter [top|middle|bottom]");
+		}
+		if (cvar.getStringValue() == "middle" && cvarManager->getCvar("flipready_positionx").getStringValue() == "middle") {
+			cvar.setValue(oldval);
+			LOG("Vertical position not saved. Both positions can't be middle.");
+		}
+	});
+
 	gameWrapper->RegisterDrawable(std::bind(&FlipReady::Render, this, std::placeholders::_1));
 
 }
@@ -93,4 +115,12 @@ void FlipReady::Render(CanvasWrapper canvas)
 		canvas.DrawString(flip_str, 2 * fontSize, 2 * fontSize);
 		timer = realTime;									// constantly update timer to realtime while car hasn't jumped
 	}
+}
+
+void ShowColors(FRStyle* ref) {
+
+}
+
+void ShowSizes(FRStyle* ref) {
+
 }

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iostream>
 
+void ShowColors(FRStyle* ref);
+void ShowSizes(FRStyle* ref);
 std::string linearcolor2hex(LinearColor color);
 
 const FRStyle frstyle_default = FRStyle{
