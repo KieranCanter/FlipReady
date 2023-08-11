@@ -1,10 +1,12 @@
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace
-.vscode/settings.json
+*
 
-FlipReady.vcxproj.user
-FlipReady.zip
+!.gitignore
+!README.md
+!src/FlipReady.cpp
+!src/FlipReady.h
+!src/FlipReady.rc
+!src/FlipReady.sln
+!src/FlipReady.vcxproj
+!src/FlipReady.vcxproj.filters
+!src/FlipReady.vcxproj.user
+!src/FlipReadySettings
