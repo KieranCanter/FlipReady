@@ -14,6 +14,7 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
+	// Initialize CVars
 	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
 	cvarManager->registerCvar("flipready_color_fliptext", "#00FF00FF", "Change \"Flip\" text color with hexcode.", true);
 	cvarManager->registerCvar("flipready_color_nofliptext", "#FF0000FF", "Change \"No Flip\" text color with hexcode.", true);

@@ -11,5 +11,4 @@ src/*
 !src/FlipReady.sln
 !src/FlipReady.vcxproj
 !src/FlipReady.vcxproj.filters
-!src/FlipReady.vcxproj.user
 !src/FlipReadySettings.cpp
