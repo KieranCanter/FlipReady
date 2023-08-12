@@ -5,6 +5,7 @@
 
 void ShowColors(FRStyle* ref);
 void ShowSizes(FRStyle* ref);
+void ShowLocation(FRStyle* ref);
 std::string linearcolor2hex(LinearColor color);
 
 const FRStyle frstyle_default = FRStyle{
@@ -56,10 +57,12 @@ void FlipReady::RenderSettings() {
 	FlipReady::ShowSizes(&frstyle);
 
 	ImGui::NewLine();
+
+	FlipReady::ShowLocation(&frstyle);
 }
 
 void FlipReady::ShowColors(FRStyle* ref) {
-	if (ImGui::BeginTabBar("##colors_tab", ImGuiTabBarFlags_None)) {
+	if (ImGui::BeginTabBar("##colors_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Colors (Crtl+click to enter values)")) {
 			ImGuiColorEditFlags color_flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaPreview
 				| ImGuiColorEditFlags_AlphaBar;
@@ -167,7 +170,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 }
 
 void FlipReady::ShowSizes(FRStyle* ref) {
-	if (ImGui::BeginTabBar("##sizes_tab", ImGuiTabBarFlags_None)) {
+	if (ImGui::BeginTabBar("##sizes_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Sizes (Ctrl+click to enter values)")) {
 
 			// Keep Bar Ratio:
@@ -320,13 +323,94 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			}
 			ImGui::PopID();
 
-			
+			ImGui::PushID("bardecay");
+			static int dummy2 = 0;
 
+			ImGui::TextUnformatted("Gauge Bar Decay Direction:");
+			ImGui::SameLine(lineupBars + 50.0f, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
+
+			if (ImGui::Selectable("LEFT", dummy2 == 0, ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
+				dummy2 = 0;
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip("Gauge bar decays to the left");
+
+			ImGui::SameLine(0.0f, 10.0f);
+
+			if (ImGui::Selectable("RIGHT", dummy2 == 1, ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
+				dummy2 = 1;
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip("Gauge bar decays to the right");
+
+			ImGui::PopStyleVar();
+			ImGui::PopID();
 
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
 	}
+}
+
+void FlipReady::ShowLocation(FRStyle* ref) {
+	if (ImGui::BeginTabBar("##location_tab", ImGuiTabBarFlags_NoTooltip)) {
+		if (ImGui::BeginTabItem("Location")) {
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
+
+			CVarWrapper posXCvar = cvarManager->getCvar("flipready_positionx");
+			std::string posX = posXCvar.getStringValue();
+			CVarWrapper posYCvar = cvarManager->getCvar("flipready_positiony");
+			std::string posY = cvarManager->getCvar("flipready_positiony").getStringValue();
+
+			// Top row
+			if (ImGui::Selectable("*##TL", posX == "left" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("left");
+				posYCvar.setValue("top");
+			}
+			ImGui::SameLine();
+			if (ImGui::Selectable("*##TM", posX == "middle" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posYCvar.setValue("top");
+				posXCvar.setValue("middle");
+			}
+			ImGui::SameLine();
+			if (ImGui::Selectable("*##TR", posX == "right" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("right");
+				posYCvar.setValue("top");
+			}
+
+			// Middle row
+			if (ImGui::Selectable("*##ML", posX == "left" && posY == "middle", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("left");
+				posYCvar.setValue("middle");
+			}
+			ImGui::SameLine();
+			ImGui::Selectable(" SELECT\nPOSITION", false, ImGuiSelectableFlags_Disabled, ImVec2(50, 50));
+			ImGui::SameLine();
+			if (ImGui::Selectable("*##MR", posX == "right" && posY == "middle", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("right");
+				posYCvar.setValue("middle");
+			}
+
+			// Bottom row
+			if (ImGui::Selectable("*##BL", posX == "left" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("left");
+				posYCvar.setValue("bottom");
+			}
+			ImGui::SameLine();
+			if (ImGui::Selectable("*##BM", posX == "middle" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posYCvar.setValue("bottom");
+				posXCvar.setValue("middle");
+			}
+			ImGui::SameLine();
+			if (ImGui::Selectable("*##BR", posX == "right" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
+				posXCvar.setValue("right");
+				posYCvar.setValue("bottom");
+			}
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndTabItem();
+	}
+	ImGui::EndTabBar();
 }
 
 std::string linearcolor2hex(LinearColor color) {

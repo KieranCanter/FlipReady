@@ -25,7 +25,7 @@ class FlipReady: public BakkesMod::Plugin::BakkesModPlugin
 	//,public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
-	//std::shared_ptr<bool> enabled;
+	std::shared_ptr<bool> enabled;
 
 	//Boilerplate
 	void onLoad() override;
@@ -38,4 +38,9 @@ public:
 
 	void ShowColors(FRStyle* ref);
 	void ShowSizes(FRStyle* ref);
+	void ShowLocation(FRStyle* ref);
 };
+/*
+class FlipReadySettings : public BakkesMod::Plugin::BakkesModPlugin, public SettingsWindowBase {
+	void RenderSettings() override;
+}; */

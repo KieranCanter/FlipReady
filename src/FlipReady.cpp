@@ -106,8 +106,12 @@ void FlipReady::Render(CanvasWrapper canvas)
 
 	if (posStrX == "left")
 		posX = screen.X * 0.05;
-	else if (posStrX == "right")
-		posX = screen.X * 0.95;
+	else if (posStrX == "right") {
+		if (posStrY == "bottom")
+			posX = screen.X * 0.8;
+		else
+			posX = screen.X * 0.95;
+	}
 	else
 		posX = screen.X * 0.5;
 
@@ -116,8 +120,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 	else if (posStrY == "bottom")
 		if (posStrX == "left")
 			posY = screen.Y * 0.8;
-		else if (posStrX == "right")
-			posY = screen.Y * 0.65;
 		else
 			posY = screen.Y * 0.9;
 	else
@@ -134,14 +136,20 @@ void FlipReady::Render(CanvasWrapper canvas)
 	if (!car.HasFlip()) {									// car does not have accesible flip
 		flip_str = "NO FLIP";
 
+		// Positioning
 		if (posStrX == "middle")
 			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
 		else if (posStrX == "right")
-			posX = posX + (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
+			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
 		else
 			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
 
-		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+		if (posStrY == "middle")
+			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+		else if (posStrY == "bottom")
+			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
+		else
+			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
 
 		canvas.SetColor(colorNoFlipText);					// set color red
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
@@ -168,6 +176,7 @@ void FlipReady::Render(CanvasWrapper canvas)
 	else if (car.HasFlip()) {								// car has flip but has not jumped
 		flip_str = "FLIP";
 		
+		// Positioning
 		if (posStrX == "middle")
 			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
 		else if (posStrX == "right")
@@ -178,7 +187,9 @@ void FlipReady::Render(CanvasWrapper canvas)
 		if (posStrY == "middle")
 			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
 		else if (posStrY == "bottom")
-			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
+		else
+			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
 
 		canvas.SetColor(colorFlipText);					// set color green
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
@@ -187,10 +198,8 @@ void FlipReady::Render(CanvasWrapper canvas)
 	}
 }
 
-void ShowColors(FRStyle* ref) {
+void ShowColors(FRStyle* ref) {}
 
-}
+void ShowSizes(FRStyle* ref) {}
 
-void ShowSizes(FRStyle* ref) {
-
-}
+void ShowLocation(FRStyle* ref) {}
