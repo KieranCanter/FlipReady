@@ -12,9 +12,11 @@ const FRStyle frstyle_default = FRStyle{
 	LinearColor{0, 255, 0, 255},
 	LinearColor{255, 0, 0, 255},
 	LinearColor{0, 255, 0, 255},
+	true,
 	20.0f,
 	20.0f,
 	5.0f,
+	"left"
 	"top",
 	"middle"
 };
@@ -29,16 +31,14 @@ void FlipReady::RenderSettings() {
 		cvarManager->getCvar("flipready_color_fliptext").getColorValue(),
 		cvarManager->getCvar("flipready_color_nofliptext").getColorValue(),
 		cvarManager->getCvar("flipready_color_gaugebar").getColorValue(),
+		cvarManager->getCvar("flipready_keepbarratio").getBoolValue(),
 		cvarManager->getCvar("flipready_fontsize").getFloatValue(),
 		cvarManager->getCvar("flipready_barlen").getFloatValue(),
 		cvarManager->getCvar("flipready_barheight").getFloatValue(),
+		cvarManager->getCvar("flipready_decaydir").getStringValue(),
 		cvarManager->getCvar("flipready_positionx").getStringValue(),
 		cvarManager->getCvar("flipready_positiony").getStringValue(),
 	};
-
-	ImGui::TextUnformatted("Actively being updated with new options and aesthetics.");
-
-	ImGui::NewLine();
 
 	// Enable toggle
 	CVarWrapper enableCvar = cvarManager->getCvar("flipready_enabled");
@@ -324,21 +324,22 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			ImGui::PopID();
 
 			ImGui::PushID("bardecay");
-			static int dummy2 = 0;
+			CVarWrapper decayCvar = cvarManager->getCvar("flipready_decaydir");
+			std::string decay = decayCvar.getStringValue();
 
 			ImGui::TextUnformatted("Gauge Bar Decay Direction:");
 			ImGui::SameLine(lineupBars + 50.0f, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
 
-			if (ImGui::Selectable("LEFT", dummy2 == 0, ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
-				dummy2 = 0;
+			if (ImGui::Selectable("LEFT", decay == "left", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
+				decayCvar.setValue("left");
 			if (ImGui::IsItemHovered())
 				ImGui::SetTooltip("Gauge bar decays to the left");
 
 			ImGui::SameLine(0.0f, 10.0f);
 
-			if (ImGui::Selectable("RIGHT", dummy2 == 1, ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
-				dummy2 = 1;
+			if (ImGui::Selectable("RIGHT", decay == "right", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
+				decayCvar.setValue("right");
 			if (ImGui::IsItemHovered())
 				ImGui::SetTooltip("Gauge bar decays to the right");
 
