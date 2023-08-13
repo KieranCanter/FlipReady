@@ -12,7 +12,6 @@ struct FRStyle {
 	LinearColor color_fliptext;
 	LinearColor color_nofliptext;
 	LinearColor color_gaugebar;
-	bool		keep_bar_ratio;
 	float		font_size;
 	float		bar_len;
 	float		bar_height;

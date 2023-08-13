@@ -14,19 +14,33 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
-	// Initialize CVars
+	// Initialize CVars //
+	
+	// Enable
 	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
+	
+	// Colors
 	cvarManager->registerCvar("flipready_color_fliptext", "#00FF00FF", "Change \"Flip\" text color with hexcode.", true);
 	cvarManager->registerCvar("flipready_color_nofliptext", "#FF0000FF", "Change \"No Flip\" text color with hexcode.", true);
 	cvarManager->registerCvar("flipready_color_gaugebar", "#00FF00FF", "Change gauge bar color with hexcode.", true, true);
-	cvarManager->registerCvar("flipready_keepbarratio", "1", "1 = maintain bar ratio | 0 = neglect bar ratio.", true, true, 0, true, 1);
+	
+	// Sizes
 	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize (1-100).", true, true, 1, true, 100);
 	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true, true, 1, true, 100);
 	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true, true, 1, true, 25);
+	
+	// Decay Direction
 	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right]", true);
+	
+	// Positioning
 	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position [left|middle|right].", true);
 	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position [top|middle|bottom].", true);
 	
+	// Display to allow user to see what their setting is altering
+	cvarManager->registerCvar("flipready_displaycomponent", "0", "0 = normal | 1 = fliptext | 2 = nofliptext | 3 = gauge bar.", false, true, 0, true, 3);
+
+	// End Initialize Cvars //
+
 	// Don't save value if it isn't a valid position
 	// Cannot have both positions equal middle
 	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
@@ -96,6 +110,7 @@ void FlipReady::Render(CanvasWrapper canvas)
 	std::string posStrX = cvarManager->getCvar("flipready_positionx").getStringValue();
 	std::string posStrY = cvarManager->getCvar("flipready_positiony").getStringValue();
 	std::string decayDir = cvarManager->getCvar("flipready_decaydir").getStringValue();
+	int displayComponent = cvarManager->getCvar("flipready_displaycomponent").getIntValue();
 
 
 	// End Pre-Logic
@@ -140,9 +155,10 @@ void FlipReady::Render(CanvasWrapper canvas)
 
 	// CORE FUNCTIONALITY
 	std::string flip_str;
-	unsigned long jumped = car.GetbJumped();				// 1 if car jumped and is still in air, 0 otherwise
+	bool hasFlip = car.HasFlip();
+	unsigned long jumped = car.GetbJumped();
 	
-	if (!car.HasFlip()) {									// car does not have accesible flip
+	if (!car.HasFlip() || displayComponent == 2) {									
 		flip_str = "NO FLIP";
 
 		// Positioning
@@ -160,12 +176,13 @@ void FlipReady::Render(CanvasWrapper canvas)
 		else
 			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
 
-		canvas.SetColor(colorNoFlipText);					// set color red
+		canvas.SetColor(colorNoFlipText);				
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
 	}
-	else if (jumped) {										// car jumped and is still in air
+	else if (jumped || displayComponent == 3) {									
 		
+		// Positioning
 		if (posStrX == "middle")
 			posX -= barLen * 0.5;
 		else if (posStrX == "right")
@@ -176,21 +193,28 @@ void FlipReady::Render(CanvasWrapper canvas)
 		else if (posStrY == "bottom")
 			posY -= barHeight;
 
-		canvas.SetColor(colorGaugeBar);						// set color green
+		canvas.SetColor(colorGaugeBar);					
+
 		// indicator gauge is drawn and filled, depletes to empty over 1.5 seconds
 
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawBox(Vector2{ int(barLen), int(barHeight) });
-		if (decayDir == "left") {
-			canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+		
+		if (displayComponent != 3) {
+			if (decayDir == "left") {
+				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+			}
+			else if (decayDir == "right") {
+				posX += barLen * ((realTime - timer) / 1.5);
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+			}
 		}
-		else if (decayDir == "right") {
-			posX += barLen * ((realTime - timer) / 1.5);
-			canvas.SetPosition(Vector2{ int(posX), int(posY) });
-			canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+		else {
+			canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
 		}
 	}
-	else if (car.HasFlip()) {								// car has flip but has not jumped
+	else if (car.HasFlip() || displayComponent == 1) {								
 		flip_str = "FLIP";
 		
 		// Positioning
@@ -208,10 +232,10 @@ void FlipReady::Render(CanvasWrapper canvas)
 		else
 			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
 
-		canvas.SetColor(colorFlipText);					// set color green
+		canvas.SetColor(colorFlipText);					
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
-		timer = realTime;									// constantly update timer to realtime while car hasn't jumped
+		timer = realTime;									
 	}
 }
 

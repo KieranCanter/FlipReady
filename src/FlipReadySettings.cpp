@@ -12,7 +12,6 @@ const FRStyle frstyle_default = FRStyle{
 	LinearColor{0, 255, 0, 255},
 	LinearColor{255, 0, 0, 255},
 	LinearColor{0, 255, 0, 255},
-	true,
 	20.0f,
 	20.0f,
 	5.0f,
@@ -31,7 +30,6 @@ void FlipReady::RenderSettings() {
 		cvarManager->getCvar("flipready_color_fliptext").getColorValue(),
 		cvarManager->getCvar("flipready_color_nofliptext").getColorValue(),
 		cvarManager->getCvar("flipready_color_gaugebar").getColorValue(),
-		cvarManager->getCvar("flipready_keepbarratio").getBoolValue(),
 		cvarManager->getCvar("flipready_fontsize").getFloatValue(),
 		cvarManager->getCvar("flipready_barlen").getFloatValue(),
 		cvarManager->getCvar("flipready_barheight").getFloatValue(),
@@ -67,6 +65,9 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			ImGuiColorEditFlags color_flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaPreview
 				| ImGuiColorEditFlags_AlphaBar;
 
+			CVarWrapper displayComponentCvar = cvarManager->getCvar("flipready_displaycomponent");
+			displayComponentCvar.setValue(0);
+
 			// 'Flip' Text:
 			ImGui::PushID("fliptext");
 			ImGui::TextUnformatted("\"Flip\" Text:");
@@ -79,6 +80,8 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##FlipText", colorFTArr, color_flags)) {
 				colorFlipTextCvar.setValue(LinearColor{ colorFTArr[0], colorFTArr[1], colorFTArr[2], colorFTArr[3] } * 255.0f);
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(1);
 			if (colorFlipText != frstyle_default.color_fliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -111,6 +114,8 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##NoFlipText", colorNFTArr, color_flags)) {
 				colorNoFlipTextCvar.setValue(LinearColor{ colorNFTArr[0], colorNFTArr[1], colorNFTArr[2], colorNFTArr[3] } *255.0f);
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(2);
 			if (colorNoFlipText != frstyle_default.color_nofliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -143,6 +148,8 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##GaugeBar", colorGBArr, color_flags)) {
 				colorGaugeBarCvar.setValue(LinearColor{ colorGBArr[0], colorGBArr[1], colorGBArr[2], colorGBArr[3] } * 255.0f);
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(3);
 			if (colorGaugeBar != frstyle_default.color_gaugebar) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -173,40 +180,27 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 	if (ImGui::BeginTabBar("##sizes_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Sizes (Ctrl+click to enter values)")) {
 
-			// Keep Bar Ratio:
+			CVarWrapper displayComponentCvar = cvarManager->getCvar("flipready_displaycomponent");
+			displayComponentCvar.setValue(0);
+
+			// Loading sizes
+			CVarWrapper fontSizeCvar = cvarManager->getCvar("flipready_fontsize");
+			float fontSize = fontSizeCvar.getFloatValue();
 			CVarWrapper barLenCvar = cvarManager->getCvar("flipready_barlen");
 			float barLen = barLenCvar.getFloatValue();
 			CVarWrapper barHeightCvar = cvarManager->getCvar("flipready_barheight");
 			float barHeight = barHeightCvar.getFloatValue();
-			float barRatio = barLen / barHeight;
-
-			CVarWrapper keepBarRatioCvar = cvarManager->getCvar("flipready_keepbarratio");
-			static bool keepBarRatio = keepBarRatioCvar.getBoolValue();
-			if (ImGui::Checkbox("Maintain Gauge Bar Ratio", &keepBarRatio)) {
-				keepBarRatioCvar.setValue(keepBarRatio);
-			}
-
-			if (barRatio != 4.0f) {
-				ImGui::SameLine(0.0f, 15.0f);
-				if (ImGui::Button("RESET RATIO", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
-					barRatio = 4.0f;
-					barLenCvar.setValue(barHeight * barRatio);
-					keepBarRatio = true;
-				}
-				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: Length:Height = 4:1");
-			}
 
 			// Font Size:
 			ImGui::PushID("fontsize");
 			ImGui::TextUnformatted("Font Size:");
 
 			ImGui::SameLine(lineupBars, 0.0f);
-			CVarWrapper fontSizeCvar = cvarManager->getCvar("flipready_fontsize");
-			float fontSize = fontSizeCvar.getFloatValue();
-			if (ImGui::SliderFloat("##FontSize", &fontSize, 1.0f, 100.0f, "%.1f", 1.0f)) {
+			if (ImGui::SliderFloat("##FontSize", &fontSize, 1.0f, 100.0f, "%.1f", 1.0f)) {	
 				fontSizeCvar.setValue(fontSize);
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(1);
 			if (fontSize != frstyle_default.font_size) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -223,7 +217,6 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				if (ImGui::IsItemHovered()) {
 					std::stringstream prev;
 					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->font_size;
-
 					std::string out = prev.str();
 					ImGui::SetTooltip(out.c_str());
 				}
@@ -236,26 +229,14 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 
 			ImGui::SameLine(lineupBars, 0.0f);
 			if (ImGui::SliderFloat("##BarLen", &barLen, 1.0f, 100.0f, "%.1f", 1.0f)) {
-				if (keepBarRatio) {
-					if (barLen >= barRatio) {
-						barLenCvar.setValue(barLen);
-						barHeightCvar.setValue(barLen * (1/barRatio));
-					}
-					else {
-						barLenCvar.setValue(barRatio);
-						barHeightCvar.setValue(1);
-					}
-				}
-				else {
 					barLenCvar.setValue(barLen);
-				}
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(3);
 			if (barLen != frstyle_default.bar_len) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barLenCvar.setValue(frstyle_default.bar_len);
-					if (keepBarRatio)
-						barHeightCvar.setValue(frstyle_default.bar_height);
 				}
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Default: 20.0");
@@ -264,17 +245,10 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				ImGui::SameLine(0.0f, 2.0f);
 				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barLenCvar.setValue(ref->bar_len);
-					if (keepBarRatio) {
-						barHeightCvar.setValue(ref->bar_len * (1/barRatio));
-					}
 				}
 				if (ImGui::IsItemHovered()) {
 					std::stringstream prev;
 					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_len;
-					if (keepBarRatio) {
-						prev << " (also height -> " << ref->bar_height << ")";
-					}
-
 					std::string out = prev.str();
 					ImGui::SetTooltip(out.c_str());
 				}
@@ -288,16 +262,13 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			ImGui::SameLine(lineupBars, 0.0f);
 			if (ImGui::SliderFloat("##BarHeight", &barHeight, 1.0f, 25.0f, "%.1f", 1.0f)) {
 				barHeightCvar.setValue(barHeight);
-				if (keepBarRatio) {
-					barLenCvar.setValue(barHeight * barRatio);
-				}
 			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponentCvar.setValue(3);
 			if (barHeight != frstyle_default.bar_height) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barHeightCvar.setValue(frstyle_default.bar_height);
-					if (keepBarRatio)
-						barLenCvar.setValue(frstyle_default.bar_len);
 				}
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Default: 5.0");
@@ -306,17 +277,10 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				ImGui::SameLine(0.0f, 2.0f);
 				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
 					barHeightCvar.setValue(ref->bar_height);
-					if (keepBarRatio) {
-						barLenCvar.setValue(ref->bar_height * barRatio);
-					}
 				}
 				if (ImGui::IsItemHovered()) {
 					std::stringstream prev;
 					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_height;
-					if (keepBarRatio) {
-						prev << " (also length -> " << ref->bar_len << ")";
-					}
-
 					std::string out = prev.str();
 					ImGui::SetTooltip(out.c_str());
 				}
@@ -419,3 +383,4 @@ std::string linearcolor2hex(LinearColor color) {
 	snprintf(res, sizeof res, "%02X%02X%02X%02X", int(color.R), int(color.G), int(color.B), int(color.A));
 	return std::string(res);
 }
+
