@@ -20,6 +20,7 @@ struct FRStyle {
 	std::string position_y;
 };
 
+extern int displayComponent;
 
 class FlipReady: public BakkesMod::Plugin::BakkesModPlugin
 	,public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
@@ -37,6 +38,7 @@ public:
 	void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
 	//void RenderWindow() override; // Uncomment if you want to render your own plugin window
 
+	void ShowSave(FRStyle* ref);
 	void ShowColors(FRStyle* ref);
 	void ShowSizes(FRStyle* ref);
 	void ShowLocation(FRStyle* ref);

@@ -15,9 +15,9 @@ const FRStyle frstyle_default = FRStyle{
 	20.0f,
 	20.0f,
 	5.0f,
-	"left"
-	"top",
-	"middle"
+	"left",
+	"middle",
+	"top"
 };
 
 const float lineupBars = 130.0f;
@@ -45,6 +45,66 @@ void FlipReady::RenderSettings() {
 		enableCvar.setValue(enabled);
 	}
 
+	if (ImGui::Button("SAVE ALL", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+		frstyle = FRStyle{
+			cvarManager->getCvar("flipready_color_fliptext").getColorValue(),
+			cvarManager->getCvar("flipready_color_nofliptext").getColorValue(),
+			cvarManager->getCvar("flipready_color_gaugebar").getColorValue(),
+			cvarManager->getCvar("flipready_fontsize").getFloatValue(),
+			cvarManager->getCvar("flipready_barlen").getFloatValue(),
+			cvarManager->getCvar("flipready_barheight").getFloatValue(),
+			cvarManager->getCvar("flipready_decaydir").getStringValue(),
+			cvarManager->getCvar("flipready_positionx").getStringValue(),
+			cvarManager->getCvar("flipready_positiony").getStringValue(),
+		};
+		cvarManager->executeCommand("writeconfig", false);
+		gameWrapper->Toast("SAVED SETTINGS", "");
+	}
+
+	if (ImGui::Button("RESET ALL", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+		ImGui::OpenPopup("Reset settings to default?");
+	}
+	
+	int popupPosX = ImGui::GetWindowPos().x + ImGui::GetWindowSize().x / 2;
+	int popupPosY = ImGui::GetWindowPos().y + ImGui::GetWindowSize().y / 2;
+	ImVec2 center = ImVec2(popupPosX, popupPosY);
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal("Reset settings to default?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		popupPosX -= ImGui::GetWindowWidth() / 2;
+		popupPosY -= ImGui::GetWindowHeight() / 2;
+		center = ImVec2(popupPosX, popupPosY);
+		ImGui::SetWindowPos(center);
+
+		ImGui::Text("This will reset all settings to default.");
+		ImGui::NewLine();
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0))) {
+			frstyle = frstyle_default;
+			cvarManager->getCvar("flipready_color_fliptext").setValue(frstyle_default.color_fliptext);
+			cvarManager->getCvar("flipready_color_nofliptext").setValue(frstyle_default.color_nofliptext);
+			cvarManager->getCvar("flipready_color_gaugebar").setValue(frstyle_default.color_gaugebar);
+			cvarManager->getCvar("flipready_fontsize").setValue(frstyle_default.font_size);
+			cvarManager->getCvar("flipready_barlen").setValue(frstyle_default.bar_len);
+			cvarManager->getCvar("flipready_barheight").setValue(frstyle_default.bar_height);
+			cvarManager->getCvar("flipready_decaydir").setValue(frstyle_default.decay_dir);
+			cvarManager->getCvar("flipready_positiony").setValue(frstyle_default.position_y);
+			cvarManager->getCvar("flipready_positionx").setValue(frstyle_default.position_x);
+
+			gameWrapper->Toast("RESET SETTINGS TO \nDEFAULT", "");
+			cvarManager->executeCommand("writeconfig", false);
+
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		ImGui::EndPopup();
+	}
+
 	ImGui::NewLine();
 
 	// Colors:
@@ -59,14 +119,20 @@ void FlipReady::RenderSettings() {
 	FlipReady::ShowLocation(&frstyle);
 }
 
+void FlipReady::ShowSave(FRStyle* ref) {
+
+
+}
+
+
 void FlipReady::ShowColors(FRStyle* ref) {
 	if (ImGui::BeginTabBar("##colors_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Colors (Crtl+click to enter values)")) {
 			ImGuiColorEditFlags color_flags = ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaPreview
 				| ImGuiColorEditFlags_AlphaBar;
 
-			CVarWrapper displayComponentCvar = cvarManager->getCvar("flipready_displaycomponent");
-			displayComponentCvar.setValue(0);
+			static int clicked;
+
 
 			// 'Flip' Text:
 			ImGui::PushID("fliptext");
@@ -80,8 +146,13 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##FlipText", colorFTArr, color_flags)) {
 				colorFlipTextCvar.setValue(LinearColor{ colorFTArr[0], colorFTArr[1], colorFTArr[2], colorFTArr[3] } * 255.0f);
 			}
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(1);
+			if (ImGui::IsItemActivated())
+				clicked = 1;
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 1))
+				displayComponent = 1;
+			else
+				displayComponent = 0;
+
 			if (colorFlipText != frstyle_default.color_fliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -114,8 +185,11 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##NoFlipText", colorNFTArr, color_flags)) {
 				colorNoFlipTextCvar.setValue(LinearColor{ colorNFTArr[0], colorNFTArr[1], colorNFTArr[2], colorNFTArr[3] } *255.0f);
 			}
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(2);
+			if (ImGui::IsItemActivated())
+				clicked = 2;
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 2))
+				displayComponent = 2;
+
 			if (colorNoFlipText != frstyle_default.color_nofliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -148,8 +222,11 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			if (ImGui::ColorEdit4("##GaugeBar", colorGBArr, color_flags)) {
 				colorGaugeBarCvar.setValue(LinearColor{ colorGBArr[0], colorGBArr[1], colorGBArr[2], colorGBArr[3] } * 255.0f);
 			}
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(3);
+			if (ImGui::IsItemActivated())
+				clicked = 3;
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 3))
+				displayComponent = 3;
+
 			if (colorGaugeBar != frstyle_default.color_gaugebar) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -179,9 +256,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 void FlipReady::ShowSizes(FRStyle* ref) {
 	if (ImGui::BeginTabBar("##sizes_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Sizes (Ctrl+click to enter values)")) {
-
 			CVarWrapper displayComponentCvar = cvarManager->getCvar("flipready_displaycomponent");
-			displayComponentCvar.setValue(0);
 
 			// Loading sizes
 			CVarWrapper fontSizeCvar = cvarManager->getCvar("flipready_fontsize");
@@ -200,7 +275,8 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				fontSizeCvar.setValue(fontSize);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(1);
+				displayComponent = 1;
+
 			if (fontSize != frstyle_default.font_size) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -232,7 +308,8 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					barLenCvar.setValue(barLen);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(3);
+				displayComponent = 3;
+
 			if (barLen != frstyle_default.bar_len) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -264,7 +341,8 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 				barHeightCvar.setValue(barHeight);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
-				displayComponentCvar.setValue(3);
+				displayComponent = 3;
+
 			if (barHeight != frstyle_default.bar_height) {
 				ImGui::SameLine(0.0f, 1.0f);
 				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -291,6 +369,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			CVarWrapper decayCvar = cvarManager->getCvar("flipready_decaydir");
 			std::string decay = decayCvar.getStringValue();
 
+			// Gauge Bar Decay
 			ImGui::TextUnformatted("Gauge Bar Decay Direction:");
 			ImGui::SameLine(lineupBars + 50.0f, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
@@ -298,14 +377,14 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			if (ImGui::Selectable("LEFT", decay == "left", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
 				decayCvar.setValue("left");
 			if (ImGui::IsItemHovered())
-				ImGui::SetTooltip("Gauge bar decays to the left");
+				displayComponent = 3;
 
 			ImGui::SameLine(0.0f, 10.0f);
 
 			if (ImGui::Selectable("RIGHT", decay == "right", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
 				decayCvar.setValue("right");
 			if (ImGui::IsItemHovered())
-				ImGui::SetTooltip("Gauge bar decays to the right");
+				displayComponent = 3;
 
 			ImGui::PopStyleVar();
 			ImGui::PopID();

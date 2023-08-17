@@ -8,13 +8,14 @@
 BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_FREEPLAY)
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
+int displayComponent;
 
 void FlipReady::onLoad()
 {
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
-	// Initialize CVars //
+	// *** Initialize CVars *** //
 	
 	// Enable
 	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
@@ -29,17 +30,14 @@ void FlipReady::onLoad()
 	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true, true, 1, true, 100);
 	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true, true, 1, true, 25);
 	
-	// Decay Direction
+	// Gauge Bar Options
 	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right]", true);
 	
 	// Positioning
 	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position [left|middle|right].", true);
 	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position [top|middle|bottom].", true);
-	
-	// Display to allow user to see what their setting is altering
-	cvarManager->registerCvar("flipready_displaycomponent", "0", "0 = normal | 1 = fliptext | 2 = nofliptext | 3 = gauge bar.", false, true, 0, true, 3);
 
-	// End Initialize Cvars //
+	// *** End Initialize Cvars *** //
 
 	// Don't save value if it isn't a valid position
 	// Cannot have both positions equal middle
@@ -110,7 +108,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 	std::string posStrX = cvarManager->getCvar("flipready_positionx").getStringValue();
 	std::string posStrY = cvarManager->getCvar("flipready_positiony").getStringValue();
 	std::string decayDir = cvarManager->getCvar("flipready_decaydir").getStringValue();
-	int displayComponent = cvarManager->getCvar("flipready_displaycomponent").getIntValue();
 
 
 	// End Pre-Logic
@@ -142,15 +139,13 @@ void FlipReady::Render(CanvasWrapper canvas)
 	if (posStrY == "middle")
 		posY = screen.Y * 0.5;
 	else if (posStrY == "bottom")
-		if (posStrX == "left")
-			posY = screen.Y * 0.8;
-		else
-			posY = screen.Y * 0.9;
+		posY = screen.Y * 0.9;
 	else
 		posY = screen.Y * 0.1;
 
 	canvas.SetColor(255, 255, 255, 255);
 	canvas.SetPosition(Vector2{ int(posX), int(posY) });
+	canvas.DrawString(std::to_string(displayComponent));
 
 
 	// CORE FUNCTIONALITY
@@ -158,7 +153,7 @@ void FlipReady::Render(CanvasWrapper canvas)
 	bool hasFlip = car.HasFlip();
 	unsigned long jumped = car.GetbJumped();
 	
-	if (!car.HasFlip() || displayComponent == 2) {									
+	if ((!car.HasFlip() && displayComponent != 3 && displayComponent != 1) || displayComponent == 2) {									
 		flip_str = "NO FLIP";
 
 		// Positioning
@@ -180,7 +175,7 @@ void FlipReady::Render(CanvasWrapper canvas)
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
 	}
-	else if (jumped || displayComponent == 3) {									
+	else if ((jumped && displayComponent != 1) || displayComponent == 3) {									
 		
 		// Positioning
 		if (posStrX == "middle")
@@ -204,14 +199,21 @@ void FlipReady::Render(CanvasWrapper canvas)
 			if (decayDir == "left") {
 				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
 			}
-			else if (decayDir == "right") {
+			else {
 				posX += barLen * ((realTime - timer) / 1.5);
 				canvas.SetPosition(Vector2{ int(posX), int(posY) });
 				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
 			}
 		}
 		else {
-			canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
+			if (decayDir == "left") {
+				canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
+			}
+			else {
+				posX += barLen / 2;
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
+			}
 		}
 	}
 	else if (car.HasFlip() || displayComponent == 1) {								
@@ -238,6 +240,8 @@ void FlipReady::Render(CanvasWrapper canvas)
 		timer = realTime;									
 	}
 }
+
+void ShowSave(FRStyle* ref) {}
 
 void ShowColors(FRStyle* ref) {}
 
