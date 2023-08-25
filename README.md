@@ -11,8 +11,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 * Copy `FlipReady.dll` to your `bakkesmod/plugins` folder, most likely located at: 
   `C:/Users/{username}/AppData/Roaming/bakkesmod/bakkesmod/plugins`
 
-* Plugin will load automatically with Rocket League while BakkesMod is active. The plugin can be disabled through the F2 settings window (F2 > Plugins > FlipReady) or through the F6 console with `plugin unload flipready`. Similarly, the plugin can be reenabled through the F2 settings window or through the F6 console with 
-  `plugin load flipready`.
+* Plugin will load automatically with Rocket League while BakkesMod is active. The plugin can be disabled through the F2 settings window (F2 > Plugins > FlipReady) or through the F6 console with `plugin unload flipready`. Similarly, the plugin can be reenabled through the F2 settings window or through the F6 console with `plugin load flipready`.
 
 # Commands
 Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console (**default values** are bolded):
@@ -31,8 +30,9 @@ Settings are found in the F2 settings window; however, you may also use the foll
 | flipready_positiony        | [ **top** \| middle \| bottom ]   | [ Change vertical position ]                      |
 
 **Example:** If I want to make the "flip" text blue, change the font size to 25, and set the horizontal position to the left, I would type into the F6 console:
-  ```
-  flipready_color_fliptext #0000FFFF
-  flipready_fontsize 25
-  flipready_positionx left
-  ```
+  
+  `flipready_color_fliptext #0000FFFF`
+
+  `flipready_fontsize 25`
+  
+  `flipready_positionx left`
