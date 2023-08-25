@@ -38,6 +38,7 @@ void FlipReady::RenderSettings() {
 		cvarManager->getCvar("flipready_positiony").getStringValue(),
 	};
 
+
 	// Enable toggle
 	CVarWrapper enableCvar = cvarManager->getCvar("flipready_enabled");
 	static bool enabled = enableCvar.getBoolValue();
@@ -58,7 +59,7 @@ void FlipReady::RenderSettings() {
 			cvarManager->getCvar("flipready_positiony").getStringValue(),
 		};
 		cvarManager->executeCommand("writeconfig", false);
-		gameWrapper->Toast("SAVED SETTINGS", "");
+		gameWrapper->Toast("SETTINGS \nSAVED", "", "fr_logo", 3.5, ToastType_Info);
 	}
 
 	if (ImGui::Button("RESET ALL", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
@@ -93,7 +94,7 @@ void FlipReady::RenderSettings() {
 			cvarManager->getCvar("flipready_positiony").setValue(frstyle_default.position_y);
 			cvarManager->getCvar("flipready_positionx").setValue(frstyle_default.position_x);
 
-			gameWrapper->Toast("RESET SETTINGS TO \nDEFAULT", "");
+			gameWrapper->Toast("ALL SETTINGS RESET \nTO DEFAULT", "", "fr_logo", 3.5, ToastType_Info);
 			cvarManager->executeCommand("writeconfig", false);
 
 			ImGui::CloseCurrentPopup();
@@ -133,7 +134,6 @@ void FlipReady::ShowColors(FRStyle* ref) {
 
 			static int clicked;
 
-
 			// 'Flip' Text:
 			ImGui::PushID("fliptext");
 			ImGui::TextUnformatted("\"Flip\" Text:");
@@ -148,7 +148,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			}
 			if (ImGui::IsItemActivated())
 				clicked = 1;
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 1))
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && clicked == 1))
 				displayComponent = 1;
 			else
 				displayComponent = 0;
@@ -187,7 +187,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			}
 			if (ImGui::IsItemActivated())
 				clicked = 2;
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 2))
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && clicked == 2))
 				displayComponent = 2;
 
 			if (colorNoFlipText != frstyle_default.color_nofliptext) {
@@ -224,7 +224,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 			}
 			if (ImGui::IsItemActivated())
 				clicked = 3;
-			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && clicked == 3))
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive() || (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && clicked == 3))
 				displayComponent = 3;
 
 			if (colorGaugeBar != frstyle_default.color_gaugebar) {

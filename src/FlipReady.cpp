@@ -15,6 +15,8 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
+	gameWrapper->LoadToastTexture("fr_logo", gameWrapper->GetDataFolder() / "fr_logo_short_square.png");
+
 	// *** Initialize CVars *** //
 	
 	// Enable
@@ -145,7 +147,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 
 	canvas.SetColor(255, 255, 255, 255);
 	canvas.SetPosition(Vector2{ int(posX), int(posY) });
-	canvas.DrawString(std::to_string(displayComponent));
 
 
 	// CORE FUNCTIONALITY
