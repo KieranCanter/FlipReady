@@ -15,7 +15,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 `plugin load flipready`.
 
 # Commands
-Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console ($\color{#87D687}\textsf{default values are green}$):
+Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console $\color{#87D687}\textsf{(default values in green)}$:
 
 | Command                    | Arguments                                               | Effect                                            |
 | -------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
