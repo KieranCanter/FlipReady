@@ -2,7 +2,7 @@
 <html>
   <head>
     <style>
-      g { color: #87D687 }
+      g { color: #87D687; }
     </style>
   </head>
 </html>
@@ -46,13 +46,13 @@ Settings are found in the F2 settings window; however, you may also use the foll
 
 <table>
   <tr>
-    <th><p style="color: skyblue">Command</p></th>
-    <th><g>Arguments</g></th>
+    <th>Command</th>
+    <th><font color="#87D687"> Arguments </font></th>
     <th>Effect</th>
   </tr>
   <tr>
     <td>flipready_enable</td>
-    <td>[ 0 | <g>1</g> ]</td>
+    <td>[ 0 | <font color="#87D687"> 1 </font> ]</td>
     <td>[ Disable plugin | Enable plugin ]</td>
   </tr>
 </table>
