@@ -1,8 +1,4 @@
-```html
-<style>
-g { color: #87D687 }
-</style>
-```
+${\color{#87D687}\text{butthole}}$
 
 ![FlipReady Logo Long](https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486)
 
@@ -20,20 +16,20 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 * Plugin will load automatically with Rocket League while BakkesMod is active. The plugin can be disabled through the F2 settings window or through the F6 console with `plugin unload flipready`. Similarly, the plugin can be reenabled through the F2 settings window or through the F6 console with `plugin load flipready`.
 
 # Commands
-Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console (<g>default values are in green</g>):
+Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console (**_default_** values are bolded and italicized):
 
-| Command                    | Arguments                            | Effect                                            |
-| -------------------------- | ------------------------------------ | ------------------------------------------------- |
-| flipready_enabled          | [ 0 \| <g>1</g>]                     | [ Disable plugin \| Enable plugin]                |
-| flipready_color_fliptext   | [ <g>#00FF00FF</g> ]                 | [ Change "flip" text color with RGBA hexcode ]    |
-| flipready_color_nofliptext | [ <g>#FF0000FF</g> ]                 | [ Change "no flip" text color with RGBA hexcode ] |
-| flipready_color_gaugebar   | [ <g>#00FF00FF</g> ]                 | [ Change gauge bar color with RGBA hexcode ]      |
-| flipready_fontsize         | [ 1 - 100 ] [ <g>20</g> ]            | [ Change font size ]                              |
-| flipready_barlen           | [ 1 - 100 ] [ <g>20</g> ]            | [ Change gauge bar length ]                       |
-| flipready_barheight        | [ 1 - 25 ] [ <g>5</g> ]              | [ Change gauge bar height ]                       |
-| flipready_decaydir         | [ <g>left</g> \| right ]             | [ Change direction gauge bar decays ]             |
-| flipready_positionx        | [ left \| <g>middle</g> \| right ]   | [ Change horizontal position ]                    |
-| flipready_positiony        | [ <g>top</g> \| middle \| bottom ]   | [ Change vertical position ]                      |
+| Command                    | Arguments                           | Effect                                            |
+| -------------------------- | ----------------------------------- | ------------------------------------------------- |
+| flipready_enabled          | [ 0 \| **_1_** ]                    | [ Disable plugin \| Enable plugin]                |
+| flipready_color_fliptext   | [ **_#00FF00FF_** ]                 | [ Change "flip" text color with RGBA hexcode ]    |
+| flipready_color_nofliptext | [ **_#FF0000FF_** ]                 | [ Change "no flip" text color with RGBA hexcode ] |
+| flipready_color_gaugebar   | [ **_#00FF00FF_** ]                 | [ Change gauge bar color with RGBA hexcode ]      |
+| flipready_fontsize         | [ 1 - 100 ] [ **_20_** ]            | [ Change font size ]                              |
+| flipready_barlen           | [ 1 - 100 ] [ **_20_** ]            | [ Change gauge bar length ]                       |
+| flipready_barheight        | [ 1 - 25 ] [ **_5_** ]              | [ Change gauge bar height ]                       |
+| flipready_decaydir         | [ **_left_** \| right ]             | [ Change direction gauge bar decays ]             |
+| flipready_positionx        | [ left \| **_middle_** \| right ]   | [ Change horizontal position ]                    |
+| flipready_positiony        | [ **_top_** \| middle \| bottom ]   | [ Change vertical position ]                      |
 
 **Example:** If I want to make the "flip" text blue, change the font size to 25, and set the horizontal position to the left, I would type into the F6 console:
   ```
