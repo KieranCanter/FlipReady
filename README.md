@@ -20,9 +20,9 @@ Settings are found in the F2 settings window; however, you may also use the foll
 | Command                    | Arguments                                                     | Effect                                            |
 | -------------------------- | ------------------------------------------------------------- | ------------------------------------------------- |
 | flipready_enabled          | [ 0 \| $\color{#87D687}\textsf{1}$ ]                    | [ Disable plugin \| Enable plugin]                |
-| flipready_color_fliptext   | [ $\color{#87D687}\texttt{\#00FF00FF}$ ]                | [ Change "flip" text color with RGBA hexcode ]    |
-| flipready_color_nofliptext | [ $\color{#87D687}\texttt{\#FF0000FF}$ ]                | [ Change "no flip" text color with RGBA hexcode ] |
-| flipready_color_gaugebar   | [ $\color{#87D687}\tt \\#00FF00FF$ ]                | [ Change gauge bar color with RGBA hexcode ]      |
+| flipready_color_fliptext   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]                | [ Change "flip" text color with RGBA hexcode ]    |
+| flipready_color_nofliptext | [ $\color{#87D687}\texttt{\\#FF0000FF}$ ]                | [ Change "no flip" text color with RGBA hexcode ] |
+| flipready_color_gaugebar   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]                | [ Change gauge bar color with RGBA hexcode ]      |
 | flipready_fontsize         | [ 1 - 100 ] [ $\color{#87D687}\textsf{20}$ ]            | [ Change font size ]                              |
 | flipready_barlen           | [ 1 - 100 ] [ $\color{#87D687}\textsf{20}$ ]            | [ Change gauge bar length ]                       |
 | flipready_barheight        | [ 1 - 25 ] [ $\color{#87D687}\textsf{5}$ ]              | [ Change gauge bar height ]                       |
