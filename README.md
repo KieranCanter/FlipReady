@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      g { color: #87D687; }
-    </style>
-  </head>
-</html>
-
 ![FlipReady Logo Long](https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486)
 
 # Introduction
@@ -43,16 +34,3 @@ Settings are found in the F2 settings window; however, you may also use the foll
 `flipready_color_fliptext #0000FFFF`  
 `flipready_fontsize 25`  
 `flipready_positionx left`  
-
-<table>
-  <tr>
-    <th>Command</th>
-    <th><font color="#87D687"> Arguments </font></th>
-    <th>Effect</th>
-  </tr>
-  <tr>
-    <td>flipready_enable</td>
-    <td>[ 0 | <font color="#87D687"> 1 </font> ]</td>
-    <td>[ Disable plugin | Enable plugin ]</td>
-  </tr>
-</table>
