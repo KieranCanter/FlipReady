@@ -19,13 +19,13 @@ Settings are found in the F2 settings window; however, you may also use the foll
 
 | Command                    | Arguments                                               | Effect                                            |
 | -------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| flipready_enabled          | [ 0 \| $\color{#87D687}\large\textsf{1}$ ]                    | [ Disable plugin \| Enable plugin]                |
+| flipready_enabled          | [ 0 \| $\color{#87D687}\textsf{1}$ ]                    | [ Disable plugin \| Enable plugin]                |
 | flipready_color_fliptext   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]               | [ Change "flip" text color with RGBA hexcode ]    |
 | flipready_color_nofliptext | [ $\color{#87D687}\texttt{\\#FF0000FF}$ ]               | [ Change "no flip" text color with RGBA hexcode ] |
 | flipready_color_gaugebar   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]               | [ Change gauge bar color with RGBA hexcode ]      |
-| flipready_fontsize         | [ 1 - $\color{#87D687}\large\textsf{20}$ - 100 ]              | [ Change font size ]                              |
-| flipready_barlen           | [ 1 - $\color{#87D687}\large\textsf{20}$ - 100 ]              | [ Change gauge bar length ]                       |
-| flipready_barheight        | [ 1 - $\color{#87D687}\large\textsf{5}$ - 25 ]                | [ Change gauge bar height ]                       |
+| flipready_fontsize         | [ 1 - $\color{#87D687}\textsf{20}$ - 100 ]              | [ Change font size ]                              |
+| flipready_barlen           | [ 1 - $\color{#87D687}\textsf{20}$ - 100 ]              | [ Change gauge bar length ]                       |
+| flipready_barheight        | [ 1 - $\color{#87D687}\textsf{5}$ - 25 ]                | [ Change gauge bar height ]                       |
 | flipready_decaydir         | [ $\color{#87D687}\textsf{left}$ \| right ]             | [ Change direction gauge bar decays ]             |
 | flipready_positionx        | [ left \| $\color{#87D687}\textsf{middle}$ \| right ]   | [ Change horizontal position ]                    |
 | flipready_positiony        | [ $\color{#87D687}\textsf{top}$ \| middle \| bottom ]   | [ Change vertical position ]                      |
