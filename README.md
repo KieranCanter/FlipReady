@@ -30,13 +30,7 @@ Settings are found in the F2 settings window; however, you may also use the foll
 | flipready_positionx        | [ left \| **_middle_** \| right ]   | [ Change horizontal position ]                    |
 | flipready_positiony        | [ **_top_** \| middle \| bottom ]   | [ Change vertical position ]                      |
 
-**Example:** If I want to make the "flip" text blue, change the font size to 25, and set the horizontal position to the left, I would type into the F6 console:
-  ```
-  flipready_color_fliptext #0000FFFF
-  flipready_fontsize 25
-  flipready_positionx left
-  ```
+**Example:** If I want to make the "flip" text blue, change the font size to 25, and set the horizontal position to the left, I would type into the F6 console:  
 `flipready_color_fliptext #0000FFFF`  
 `flipready_fontsize 25`  
 `flipready_positionx left`  
-  <span style="color:#87D687">some text</span>
