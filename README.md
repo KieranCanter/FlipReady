@@ -47,12 +47,9 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" />
 </p>
 
-<p align="left">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/081cae72-c846-45c4-97db-476ebc00c627" alt="Decay Left" />
-</p>
-
-<p align="right">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/e5e922fe-e9b4-4d28-9852-caa023f65cb3" alt="Decay Right" />
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="500" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="500" /> 
 </p>
 
 # Commands
