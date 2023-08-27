@@ -75,8 +75,8 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
   *To display toasts, you must first navigate to the "Misc" tab in the F2 settings window and check "Enable notifications."*
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="400" />
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="400" /> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/855c6b31-257f-464f-8207-3ab20884001c" alt="Decay Left" width="400" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/2da72d86-b1c6-4c98-a788-e9aeba21c225" alt="Decay Right" width="400" /> 
 </p>
 
 
