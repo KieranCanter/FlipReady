@@ -64,7 +64,7 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 * As stated previously, location affects the direction of growth when resizing.
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" width="900"/>
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/8235fc72-6b97-420c-8dc9-2d1d574a5b49" alt="Sizes" width="900"/>
 </p>
 
 
