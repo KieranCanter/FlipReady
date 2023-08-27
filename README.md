@@ -16,7 +16,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 # Installation
 
 * Copy `FlipReady.dll` to your `bakkesmod/plugins` folder, most likely located at: 
-  `C:/Users/{username}/AppData/Roaming/bakkesmod/bakkesmod/plugins`
+  `C:/Users/{username}/AppData/Roaming/bakkesmod/bakkesmod/plugins/`
 
 * Plugin will load automatically with Rocket League while BakkesMod is active. The plugin can be disabled through the F2 settings window (F2 > Plugins > FlipReady) or through the F6 console with `plugin unload flipready`. Similarly, the plugin can be reenabled through the F2 settings window or through the F6 console with  
 `plugin load flipready`.
@@ -67,6 +67,17 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/8235fc72-6b97-420c-8dc9-2d1d574a5b49" alt="Sizes" width="900"/>
 </p>
 
+
+## Save/Reset Settings
+* Click "SAVE ALL" at the top of the settings page to save all the current settings to BakkesMod. This will write to the `config.cfg` file located in the `bakkesmod/cfg/` folder. All settings are saved as CVars (don't worry if you don't know what those are).
+* Click "RESET ALL" at the top of the settings page to reset all settings to default. A confirmation modal will appear to prevent accidental resets. If you do unintentionally reset your settings, you can still revert them back with the "REVERT" buttons before saving.
+* After clicking either of these buttons, a toast will appear in the top right corner to confirm the action.  
+  *To display toasts, you must first navigate to the "Misc" tab in the F2 settings window and check "Enable notifications."*
+
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="400" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="400" /> 
+</p>
 
 
 # Commands
