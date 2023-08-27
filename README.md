@@ -23,7 +23,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 
 
 # Settings
-The settings can be accessed through `F2 > Plugins > FlipReady`. The current customizable settings include colors, sizes, and location of the element. Once altered, buttons will appear to reset the value to default or revert back to the last saved value. Hovering over these buttons will show what the value will be reset/reverted to. Default values can also be seen in the "Commands" section towards the end. Hovering over or selected a specific setting will display the appropriate element (e.g. the gauge bar will be shown when adjusting gauge bar length).
+The settings can be accessed through `F2 > Plugins > FlipReady`. The current customizable settings include colors, sizes, and location of the element. Once altered, buttons will appear to reset the value to default or revert back to the last saved value. Hovering over these buttons will show what the value will be reset/reverted to. Default values can also be seen in the "Commands" section towards the end. Hovering over or selecting a specific setting will display the appropriate element (e.g. the gauge bar will be shown when adjusting gauge bar length).
 
 <p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b" alt="Settings Window" />
