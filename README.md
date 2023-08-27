@@ -8,7 +8,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 
 *Due to the unfairness/imbalance this can cause in competitive play, this plugin is only active within freeplay/exhibition game modes.*
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/373de1ed-5877-46d0-be32-822accfd42f5" alt="Intro Demo" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/373de1ed-5877-46d0-be32-822accfd42f5" alt="Intro Demo" width="1280" />
 </p>
 
 
