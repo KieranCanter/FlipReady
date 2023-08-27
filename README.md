@@ -48,8 +48,8 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 </p>
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="500" />
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="500" /> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="450" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="450" /> 
 </p>
 
 # Commands
