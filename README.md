@@ -9,8 +9,6 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/373de1ed-5877-46d0-be32-822accfd42f5" alt="Intro Demo" />
 </p>
 
-![Intro Demo](https://github.com/KieranCanter/FlipReady/assets/74733079/373de1ed-5877-46d0-be32-822accfd42f5)
-
 
 # Installation
 
@@ -26,7 +24,6 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 <p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b" alt="Settings Window" />
 </p>
-![Settings Window](https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b)
 
 
 ## Colors
@@ -41,9 +38,6 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 <p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/6d26e449-8ab0-4d40-b39a-8498edbc1de0" alt="Color Picker" />
 </p>
-![Colors](https://github.com/KieranCanter/FlipReady/assets/74733079/711caea8-9f16-4222-92b6-edf8fb10d4eb)
-![Color Picker](https://github.com/KieranCanter/FlipReady/assets/74733079/6d26e449-8ab0-4d40-b39a-8498edbc1de0)
-
 
 
 # Commands
