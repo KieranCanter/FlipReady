@@ -1,4 +1,6 @@
-![FlipReady Logo Long](https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486)
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486" alt="FlipReady Logo Long" width="900" />
+</p>
 
 # Introduction
 
@@ -10,6 +12,7 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 </p>
 
 
+
 # Installation
 
 * Copy `FlipReady.dll` to your `bakkesmod/plugins` folder, most likely located at: 
@@ -18,11 +21,13 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 * Plugin will load automatically with Rocket League while BakkesMod is active. The plugin can be disabled through the F2 settings window (F2 > Plugins > FlipReady) or through the F6 console with `plugin unload flipready`. Similarly, the plugin can be reenabled through the F2 settings window or through the F6 console with  
 `plugin load flipready`.
 
+
+
 # Settings
 The settings can be accessed through `F2 > Plugins > FlipReady`. The current customizable settings include colors, sizes, and location of the element. Once altered, buttons will appear to reset the value to default or revert back to the last saved value. Hovering over these buttons will show what the value will be reset/reverted to. Default values can also be seen in the "Commands" section towards the end. Hovering over or selected a specific setting will display the appropriate element (e.g. the gauge bar will be shown when adjusting gauge bar length).
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b" alt="Settings Window" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b" alt="Settings Window" width="900"/>
 </p>
 
 
@@ -31,11 +36,12 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 * The color picker on the right allows the option to manually input color values or drag to select. Keep in mind that alpha (opacity) can also be adjusted. The RGBA value boxes can be dragged to scrub through values or ctrl+clicked to manually type them in.
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/711caea8-9f16-4222-92b6-edf8fb10d4eb" alt="Colors" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/711caea8-9f16-4222-92b6-edf8fb10d4eb" alt="Colors" width="900"/>
 </p>
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/6d26e449-8ab0-4d40-b39a-8498edbc1de0" alt="Color Picker" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/6d26e449-8ab0-4d40-b39a-8498edbc1de0" alt="Color Picker" width="300"/>
 </p>
+
 
 ## Sizing
 * Like colors, the sizes of the "flip" and "no flip" texts, as well as the gauge bar, can be adjusted.
@@ -44,13 +50,24 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 * Decay direction effects the direction in which the bar will empty.
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" width="900"/>
 </p>
 
 <p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="400" />
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="400" /> 
 </p>
+
+
+## Location
+* The location of the element can be changed by simply clicking on the desired position. Appropriate locations are offset to accommodate interface features like the boost meter and ball cam indicator.
+* As stated previously, location affects the direction of growth when resizing.
+
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" width="900"/>
+</p>
+
+
 
 # Commands
 Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console $\color{#87D687}\textsf{(default values in green)}$:
