@@ -19,12 +19,17 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 
 # Settings
 The settings can be accessed through `F2 > Plugins > FlipReady`. The current customizable settings include colors, sizes, and location of the element.
+![Settings Window](https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b)
+
 
 ## Colors
 * The color of both the "flip" and "no flip" text displays, as well as the gauge bar, can be altered to any RGBA, HSLA, or Hexcode color of your choice.
 * The color picker on the right allows the option to manually input color values or drag to select. Keep in mind that alpha (opacity) can also be adjusted. The RGBA value boxes can be dragged to scrub through values or ctrl+clicked to manually type them in.
 * On selection, the appropriate element will be displayed to actively show the change in color.
 * Once altered, buttons will appear to reset the value to default or revert back to the last saved value. Hovering over these buttons will show what the value will be reset/reverted to.
+![Colors](https://github.com/KieranCanter/FlipReady/assets/74733079/711caea8-9f16-4222-92b6-edf8fb10d4eb)
+![Color Picker](https://github.com/KieranCanter/FlipReady/assets/74733079/6d26e449-8ab0-4d40-b39a-8498edbc1de0)
+
 
 
 # Commands
