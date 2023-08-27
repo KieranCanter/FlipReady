@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486" alt="FlipReady Logo Long" width="900" />
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/daf10696-262d-4701-a09c-e532a969c486" alt="FlipReady Logo Long" />
 </p>
 
 # Introduction
