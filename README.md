@@ -59,7 +59,7 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 
 
 ## Location
-* The location of the element can be changed by simply clicking on the desired position. Appropriate locations are offset to accommodate interface features like the boost meter and ball cam indicator.
+* The location of the element can be changed by simply clicking on the desired position. Certain locations are offset to accommodate interface features like the boost meter and ball cam indicator.
 * As stated previously, location affects the direction of growth when resizing.
 
 <p align="center">
