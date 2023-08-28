@@ -78,6 +78,10 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/2da72d86-b1c6-4c98-a788-e9aeba21c225" alt="Decay Right" width="400" /> 
 </p>
 
+# Demos
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/e4a290ad-d387-44de-8d06-14bbd7d18eb2" alt="Demo 1" width="1000" />/> 
+</p>
 
 # Commands
 Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console $\color{#87D687}\textsf{(default values in green)}$:
