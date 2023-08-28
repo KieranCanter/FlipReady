@@ -82,23 +82,31 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 
 # Demos
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/04734723-f65c-4697-a742-f6323f8b36d7" alt="Demo 1" width="1000" />/> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/04734723-f65c-4697-a742-f6323f8b36d7" alt="Demo 1" width="1000" /> 
 </p>
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b3ab8b8a-a10a-4209-b0b3-fcb3376c6591" alt="Demo 2" width="1000" />/> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b3ab8b8a-a10a-4209-b0b3-fcb3376c6591" alt="Demo 2" width="1000" /> 
 </p>
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/45a2bc78-902c-4264-9b56-c314603bdf4f" alt="Demo 3" width="1000" />/> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/45a2bc78-902c-4264-9b56-c314603bdf4f" alt="Demo 3" width="1000" /> 
 </p>
 
 <p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/ba625c6b-ceb7-45c2-be5a-99f5634a0078" alt="Demo 4" width="1000" />/> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/ba625c6b-ceb7-45c2-be5a-99f5634a0078" alt="Demo 4" width="1000" /> 
 </p>
 
 <p align="center">
-  <img src="" alt="Demo 5" width="1000" />/> 
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b44ef60f-afc4-41d8-be63-5b7d3640dd10" alt="Demo 5" width="1000" /> 
+</p>
+
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b6eea98e-20a0-48db-a606-11b42a473e25" alt="Demo 6" width="1000" /> 
+</p>
+
+<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/fca84cff-213a-4544-a371-7bfbd1b82be8" alt="Demo 7" width="1000" /> 
 </p>
 
 
