@@ -16,8 +16,8 @@ struct FRStyle {
 	float		bar_len;
 	float		bar_height;
 	std::string decay_dir;
-	std::string position_x;
-	std::string position_y;
+	float position_x;
+	float position_y;
 };
 
 extern int displayComponent;

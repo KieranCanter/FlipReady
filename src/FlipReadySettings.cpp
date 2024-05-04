@@ -16,8 +16,8 @@ const FRStyle frstyle_default = FRStyle{
 	20.0f,
 	5.0f,
 	"left",
-	"middle",
-	"top"
+	0.0f,
+	0.0f,
 };
 
 const float lineupBars = 130.0f;
@@ -34,8 +34,8 @@ void FlipReady::RenderSettings() {
 		cvarManager->getCvar("flipready_barlen").getFloatValue(),
 		cvarManager->getCvar("flipready_barheight").getFloatValue(),
 		cvarManager->getCvar("flipready_decaydir").getStringValue(),
-		cvarManager->getCvar("flipready_positionx").getStringValue(),
-		cvarManager->getCvar("flipready_positiony").getStringValue(),
+		cvarManager->getCvar("flipready_positionx").getFloatValue(),
+		cvarManager->getCvar("flipready_positiony").getFloatValue(),
 	};
 
 
@@ -55,8 +55,8 @@ void FlipReady::RenderSettings() {
 			cvarManager->getCvar("flipready_barlen").getFloatValue(),
 			cvarManager->getCvar("flipready_barheight").getFloatValue(),
 			cvarManager->getCvar("flipready_decaydir").getStringValue(),
-			cvarManager->getCvar("flipready_positionx").getStringValue(),
-			cvarManager->getCvar("flipready_positiony").getStringValue(),
+			cvarManager->getCvar("flipready_positionx").getFloatValue(),
+			cvarManager->getCvar("flipready_positiony").getFloatValue(),
 		};
 		cvarManager->executeCommand("writeconfig", false);
 		gameWrapper->Toast("SETTINGS \nSAVED", "", "fr_logo", 3.5, ToastType_Info);
@@ -113,11 +113,13 @@ void FlipReady::RenderSettings() {
 
 	ImGui::NewLine();
 
+	// Sizes: 
 	FlipReady::ShowSizes(&frstyle);
 
 	ImGui::NewLine();
 
-	FlipReady::ShowLocation(&frstyle);
+	// Location:
+	//FlipReady::ShowLocation(&frstyle);
 }
 
 void FlipReady::ShowSave(FRStyle* ref) {
@@ -394,7 +396,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 		ImGui::EndTabBar();
 	}
 }
-
+/*
 void FlipReady::ShowLocation(FRStyle* ref) {
 	if (ImGui::BeginTabBar("##location_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Location")) {
@@ -457,9 +459,10 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 	ImGui::EndTabBar();
 }
 
+*/
+
 std::string linearcolor2hex(LinearColor color) {
 	char res[16];
 	snprintf(res, sizeof res, "%02X%02X%02X%02X", int(color.R), int(color.G), int(color.B), int(color.A));
 	return std::string(res);
 }
-
