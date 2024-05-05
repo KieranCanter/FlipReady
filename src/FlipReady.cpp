@@ -4,7 +4,6 @@
 #include "bakkesmod/wrappers/Engine/WorldInfoWrapper.h"
 #include "utils/parser.h"
 
-
 BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_FREEPLAY)
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
@@ -15,12 +14,18 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
+	std::string resStr = SettingsWrapper().GetVideoSettings().Resolution;
+	std::string resStrLen = resStr.substr(0, resStr.find("x"));
+	std::string resStrHei = resStr.substr(resStr.find("x") + 1, resStr.length());
+	int resLen = std::stoi(resStrLen);
+	int resHei = std::stoi(resStrHei);
+
 	gameWrapper->LoadToastTexture("fr_logo", gameWrapper->GetDataFolder() / "fr_logo_short_square.png");
 
 	// *** Initialize CVars *** //
 	
 	// Enable
-	cvarManager->registerCvar("flipready_enabled", "1", "1 = enable | 0 = disable", true, true, 0, true, 1);
+	cvarManager->registerCvar("flipready_enabled", "1", "Disable/enable the plugin [0|1]", true);
 	
 	// Colors
 	cvarManager->registerCvar("flipready_color_fliptext", "#00FF00FF", "Change \"Flip\" text color with hexcode.", true);
@@ -28,50 +33,84 @@ void FlipReady::onLoad()
 	cvarManager->registerCvar("flipready_color_gaugebar", "#00FF00FF", "Change gauge bar color with hexcode.", true, true);
 	
 	// Sizes
-	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize (1-100).", true, true, 1, true, 100);
-	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true, true, 1, true, 100);
-	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true, true, 1, true, 25);
+	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize [1-100].", true);
+	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true);
+	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true);
 	
 	// Gauge Bar Options
-	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right]", true);
+	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right].", true);
 	
 	// Positioning
-	cvarManager->registerCvar("flipready_positionx", "middle", "Change horizontal position [left|middle|right].", true);
-	cvarManager->registerCvar("flipready_positiony", "top", "Change vertical position [top|middle|bottom].", true);
+	cvarManager->registerCvar("flipready_positionx", std::to_string(resLen * 0.1), "Change horizontal position [0-resolution length).", true);
+	cvarManager->registerCvar("flipready_positiony", std::to_string(resHei * 0.15), "Change vertical position [0-resolution height).", true);
 
 	// *** End Initialize Cvars *** //
 
-	// Don't save value if it isn't a valid position
-	// Cannot have both positions equal middle
-	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "middle" && cvar.getStringValue() != "right") {
+
+	// *** Input Validation *** //
+
+	// Enable
+	cvarManager->getCvar("flipready_enabled").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 0 || cvar.getIntValue() > 1) {
+			LOG("Value ({}) not saved. Please enter one of [0|1]", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter one of [left|middle|right]");
-		}
-		
-		if (cvar.getStringValue() == "middle" && cvarManager->getCvar("flipready_positiony").getStringValue() == "middle") {
-			cvar.setValue(oldval);
-			LOG("Horizontal position not saved. Both positions can't be middle.");
-		}
-	});
-	cvarManager->getCvar("flipready_positiony").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		if (cvar.getStringValue() != "top" && cvar.getStringValue() != "middle" && cvar.getStringValue() != "bottom") {
-			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter one of [top|middle|bottom]");
-		}
-		if (cvar.getStringValue() == "middle" && cvarManager->getCvar("flipready_positionx").getStringValue() == "middle") {
-			cvar.setValue(oldval);
-			LOG("Vertical position not saved. Both positions can't be middle.");
 		}
 	});
 
-	// Ensure valid inputs for decay direction
-	cvarManager->getCvar("flipready_decaydir").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "right") {
+	// Colors
+	// CVarManager does a good enough job validating color inputs
+	// Too much regex required here - causes program to crash
+
+	// Sizes
+	// Font Size
+	cvarManager->getCvar("flipready_fontsize").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
+			LOG("Value ({}) not saved. Please enter a value between [1-100].", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter one of [left|right]");
 		}
 	});
+	// Bar Length
+	cvarManager->getCvar("flipready_barlen").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
+			LOG("Value ({}) not saved. Please enter a value between [1-100].", cvar.getIntValue());
+			cvar.setValue(oldval);
+		}
+	});
+	// Bar Height
+	cvarManager->getCvar("flipready_barheight").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 25) {
+			LOG("Value ({}) not saved. Please enter a value between [1-25].", cvar.getIntValue());
+			cvar.setValue(oldval);
+		}
+	});
+
+	// Gauge Bar Options
+	// Decay Direction
+	cvarManager->getCvar("flipready_decaydir").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "right") {
+			LOG("Value ({}) not saved. Please enter one of [left|right]", cvar.getStringValue());
+			cvar.setValue(oldval);
+		}
+	});
+
+	// Positioning
+	// Horizontal Position
+	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this, resLen](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resLen) {
+			LOG("Value ({}) not saved. Please enter a value between [0-{}).", cvar.getIntValue(), resLen);
+			cvar.setValue(oldval);
+		}
+	});
+
+	// Vertical Position
+	cvarManager->getCvar("flipready_positiony").addOnValueChanged([this, resHei](std::string oldval, CVarWrapper cvar) {
+		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resHei) {
+			LOG("Value ({}) not saved. Please enter a value between [0-{}).", cvar.getIntValue(), resHei);
+			cvar.setValue(oldval);
+		}
+	});
+	
+	// *** End Input Validation *** //
 
 	gameWrapper->RegisterDrawable(std::bind(&FlipReady::Render, this, std::placeholders::_1));
 
@@ -101,20 +140,20 @@ void FlipReady::Render(CanvasWrapper canvas)
 		return;
 	}
 
+	// Initialize variables with corresponding CVars
 	LinearColor colorFlipText = cvarManager->getCvar("flipready_color_fliptext").getColorValue();
 	LinearColor colorNoFlipText = cvarManager->getCvar("flipready_color_nofliptext").getColorValue();
 	LinearColor colorGaugeBar = cvarManager->getCvar("flipready_color_gaugebar").getColorValue();
 	float fontSize = cvarManager->getCvar("flipready_fontsize").getFloatValue();
 	float barLen = 10 * cvarManager->getCvar("flipready_barlen").getFloatValue();
 	float barHeight = 10 * cvarManager->getCvar("flipready_barheight").getFloatValue();
-	std::string posStrX = cvarManager->getCvar("flipready_positionx").getStringValue();
-	std::string posStrY = cvarManager->getCvar("flipready_positiony").getStringValue();
+	int posX = cvarManager->getCvar("flipready_positionx").getFloatValue();
+	int posY = cvarManager->getCvar("flipready_positiony").getFloatValue();
 	std::string decayDir = cvarManager->getCvar("flipready_decaydir").getStringValue();
-
 
 	// End Pre-Logic
 
-	// REPLACE BELOW VALUES WITH CVARS AND FIX THE FUCKING SETTINGS
+
 	float realTime = game.GetWorldInfo().GetTimeSeconds();  // realtime of server
 	static float timer = 0;
 	float deltaTime = 1.5 + (timer - realTime);				// decay down from 1.5 -> 0
@@ -122,28 +161,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 
 	Vector2 screen = canvas.GetSize();
 	float exactFontSize = (float)screen.X * 0.0001 * fontSize;
-
-	// Positioning
-	float posX = 0;
-	float posY = 0;
-
-	if (posStrX == "left")
-		posX = screen.X * 0.05;
-	else if (posStrX == "right") {
-		if (posStrY == "bottom")
-			posX = screen.X * 0.8;
-		else
-			posX = screen.X * 0.95;
-	}
-	else
-		posX = screen.X * 0.5;
-
-	if (posStrY == "middle")
-		posY = screen.Y * 0.5;
-	else if (posStrY == "bottom")
-		posY = screen.Y * 0.9;
-	else
-		posY = screen.Y * 0.1;
 
 	canvas.SetColor(255, 255, 255, 255);
 	canvas.SetPosition(Vector2{ int(posX), int(posY) });
@@ -154,40 +171,38 @@ void FlipReady::Render(CanvasWrapper canvas)
 	bool hasFlip = car.HasFlip();
 	unsigned long jumped = car.GetbJumped();
 	
-	if ((!car.HasFlip() && displayComponent != 3 && displayComponent != 1) || displayComponent == 2) {									
+	// Car doesn't have flip
+	if ((!car.HasFlip() && displayComponent != 3 && displayComponent != 1) || displayComponent == 2) {
 		flip_str = "NO FLIP";
 
 		// Positioning
-		if (posStrX == "middle")
-			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
-		else if (posStrX == "right")
-			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
-		else
-			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
+		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
+		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
+		
+		/* Alignments for future use?
+		Align Left:		posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
+		Align Right:	posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
+		Align Top:		posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
+		Align Bottom:	posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
+		*/
 
-		if (posStrY == "middle")
-			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
-		else if (posStrY == "bottom")
-			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
-		else
-			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
-
-		canvas.SetColor(colorNoFlipText);				
+		canvas.SetColor(colorNoFlipText);
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawString(flip_str, exactFontSize, exactFontSize);
 	}
-	else if ((jumped && displayComponent != 1) || displayComponent == 3) {									
-		
-		// Positioning
-		if (posStrX == "middle")
-			posX -= barLen * 0.5;
-		else if (posStrX == "right")
-			posX -= barLen;
+	// Car jumped - timer engages
+	else if ((jumped && displayComponent != 1) || displayComponent == 3) {
 
-		if (posStrY == "middle")
-			posY -= barHeight * 0.5;
-		else if (posStrY == "bottom")
-			posY -= barHeight;
+		// Positioning
+		posX -= barLen * 0.5;
+		posY -= barHeight * 0.5;
+		
+		/* Alignments for future use?
+		Align Left:		posx += barLen;
+		Align Right:	posX -= barLen;
+		Align Top:		posY += barHeight;	
+		Align Bottom:	posY -= barHeight;
+		*/
 
 		canvas.SetColor(colorGaugeBar);					
 
@@ -217,23 +232,20 @@ void FlipReady::Render(CanvasWrapper canvas)
 			}
 		}
 	}
+	// Car has flip
 	else if (car.HasFlip() || displayComponent == 1) {								
 		flip_str = "FLIP";
 		
 		// Positioning
-		if (posStrX == "middle")
 			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
-		else if (posStrX == "right")
-			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
-		else
-			posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
-
-		if (posStrY == "middle")
 			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
-		else if (posStrY == "bottom")
-			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
-		else
-			posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
+		
+		/* Alignments for future use?
+			Align Left:		posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
+			Align Right:	posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
+			Align Top:		posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
+			Align Bottom:	posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
+		*/		
 
 		canvas.SetColor(colorFlipText);					
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
