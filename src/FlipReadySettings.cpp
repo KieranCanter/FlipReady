@@ -481,7 +481,7 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 			// Horizontal Alignment
 			ImGui::PushID("alignment");
 			ImGui::AlignTextToFramePadding();
-			ImGui::TextUnformatted("Alignment:");
+			ImGui::TextUnformatted("\n\nAlignment:");
 			ImGui::SameLine(lineupBars, 0.0f);
 
 			// Horizontal Alignment
