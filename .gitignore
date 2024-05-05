@@ -7,8 +7,6 @@
 src/*
 !src/FlipReady.cpp
 !src/FlipReady.h
-!src/FlipReady.rc
 !src/FlipReady.sln
 !src/FlipReady.vcxproj
-!src/FlipReady.vcxproj.filters
 !src/FlipReadySettings.cpp
