@@ -8,6 +8,7 @@ void ShowSizes(FRStyle* ref);
 void ShowLocation(FRStyle* ref);
 std::string linearcolor2hex(LinearColor color);
 
+
 const FRStyle frstyle_default = FRStyle{
 	LinearColor{0, 255, 0, 255},
 	LinearColor{255, 0, 0, 255},
@@ -16,12 +17,13 @@ const FRStyle frstyle_default = FRStyle{
 	20.0f,
 	5.0f,
 	"left",
-	0.0f,
-	0.0f,
+	200,
+	150,
 };
 
 const float lineupBars = 130.0f;
 const float buttonSize = 100.0f;
+bool inDragMode = false;
 
 void FlipReady::RenderSettings() {
 
@@ -34,8 +36,8 @@ void FlipReady::RenderSettings() {
 		cvarManager->getCvar("flipready_barlen").getFloatValue(),
 		cvarManager->getCvar("flipready_barheight").getFloatValue(),
 		cvarManager->getCvar("flipready_decaydir").getStringValue(),
-		cvarManager->getCvar("flipready_positionx").getFloatValue(),
-		cvarManager->getCvar("flipready_positiony").getFloatValue(),
+		cvarManager->getCvar("flipready_positionx").getIntValue(),
+		cvarManager->getCvar("flipready_positiony").getIntValue(),
 	};
 
 
@@ -55,8 +57,8 @@ void FlipReady::RenderSettings() {
 			cvarManager->getCvar("flipready_barlen").getFloatValue(),
 			cvarManager->getCvar("flipready_barheight").getFloatValue(),
 			cvarManager->getCvar("flipready_decaydir").getStringValue(),
-			cvarManager->getCvar("flipready_positionx").getFloatValue(),
-			cvarManager->getCvar("flipready_positiony").getFloatValue(),
+			cvarManager->getCvar("flipready_positionx").getIntValue(),
+			cvarManager->getCvar("flipready_positiony").getIntValue(),
 		};
 		cvarManager->executeCommand("writeconfig", false);
 		gameWrapper->Toast("SETTINGS \nSAVED", "", "fr_logo", 3.5, ToastType_Info);
@@ -119,7 +121,7 @@ void FlipReady::RenderSettings() {
 	ImGui::NewLine();
 
 	// Location:
-	//FlipReady::ShowLocation(&frstyle);
+	FlipReady::ShowLocation(&frstyle);
 }
 
 void FlipReady::ShowSave(FRStyle* ref) {
@@ -161,7 +163,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 					colorFlipTextCvar.setValue(frstyle_default.color_fliptext);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: #00FF00FF");
+					ImGui::SetTooltip("Default: %s", frstyle_default.color_fliptext);
 			}
 			if (colorFlipText != ref->color_fliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
@@ -170,7 +172,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 				}
 				if (ImGui::IsItemHovered()) {
 					std::string prev = linearcolor2hex(ref->color_fliptext);
-					ImGui::SetTooltip(("Revert back to: #" + prev).c_str());
+					ImGui::SetTooltip("Revert back to: #%s", linearcolor2hex(ref->color_fliptext));
 				}
 			}
 			ImGui::PopID();
@@ -198,7 +200,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 					colorNoFlipTextCvar.setValue(frstyle_default.color_nofliptext);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: #FF0000FF");
+					ImGui::SetTooltip("Default: %s", frstyle_default.color_nofliptext);
 			}
 			if (colorNoFlipText != ref->color_nofliptext) {
 				ImGui::SameLine(0.0f, 1.0f);
@@ -206,8 +208,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 					colorNoFlipTextCvar.setValue(ref->color_nofliptext);
 				}
 				if (ImGui::IsItemHovered()) {
-					std::string prev = linearcolor2hex(ref->color_nofliptext);
-					ImGui::SetTooltip(("Revert back to: #" + prev).c_str());
+					ImGui::SetTooltip("Revert back to: #%s", linearcolor2hex(ref->color_nofliptext));
 				}
 			}
 			ImGui::PopID();
@@ -235,7 +236,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 					colorGaugeBarCvar.setValue(frstyle_default.color_gaugebar);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: #00FF00FF");
+					ImGui::SetTooltip("Default: %s", frstyle_default.color_gaugebar);
 			}
 			if (colorGaugeBar != ref->color_gaugebar) {
 				ImGui::SameLine(0.0f, 1.0f);
@@ -243,8 +244,7 @@ void FlipReady::ShowColors(FRStyle* ref) {
 					colorGaugeBarCvar.setValue(ref->color_gaugebar);
 				}
 				if (ImGui::IsItemHovered()) {
-					std::string prev = linearcolor2hex(ref->color_gaugebar);
-					ImGui::SetTooltip(("Revert back to: #" + prev).c_str());
+					ImGui::SetTooltip("Revert back to: #%s", linearcolor2hex(ref->color_gaugebar));
 				}
 			}
 			ImGui::PopID();
@@ -285,7 +285,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					fontSizeCvar.setValue(frstyle_default.font_size);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: 20.0");
+					ImGui::SetTooltip("Default: %.1f", frstyle_default.font_size);
 			}
 			if (fontSize != ref->font_size) {
 				ImGui::SameLine(0.0f, 2.0f);
@@ -293,10 +293,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					fontSizeCvar.setValue(ref->font_size);
 				}
 				if (ImGui::IsItemHovered()) {
-					std::stringstream prev;
-					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->font_size;
-					std::string out = prev.str();
-					ImGui::SetTooltip(out.c_str());
+					ImGui::SetTooltip("Revert back to: %.1f", ref->font_size);
 				}
 			}
 			ImGui::PopID();
@@ -318,7 +315,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					barLenCvar.setValue(frstyle_default.bar_len);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: 20.0");
+					ImGui::SetTooltip("Default: %.1f", frstyle_default.bar_len);
 			}
 			if (barLen != ref->bar_len) {
 				ImGui::SameLine(0.0f, 2.0f);
@@ -326,10 +323,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					barLenCvar.setValue(ref->bar_len);
 				}
 				if (ImGui::IsItemHovered()) {
-					std::stringstream prev;
-					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_len;
-					std::string out = prev.str();
-					ImGui::SetTooltip(out.c_str());
+					ImGui::SetTooltip("Revert back to: %.1f", ref->bar_len);
 				}
 			}
 			ImGui::PopID();
@@ -351,7 +345,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					barHeightCvar.setValue(frstyle_default.bar_height);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip("Default: 5.0");
+					ImGui::SetTooltip("Default: %.1f", frstyle_default.bar_height);
 			}
 			if (barHeight != ref->bar_height) {
 				ImGui::SameLine(0.0f, 2.0f);
@@ -359,10 +353,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					barHeightCvar.setValue(ref->bar_height);
 				}
 				if (ImGui::IsItemHovered()) {
-					std::stringstream prev;
-					prev << std::setprecision(1) << std::fixed << "Revert back to: " << ref->bar_height;
-					std::string out = prev.str();
-					ImGui::SetTooltip(out.c_str());
+					ImGui::SetTooltip("Revert back to: %.1f", ref->bar_height);
 				}
 			}
 			ImGui::PopID();
@@ -396,17 +387,94 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 		ImGui::EndTabBar();
 	}
 }
-/*
+
 void FlipReady::ShowLocation(FRStyle* ref) {
 	if (ImGui::BeginTabBar("##location_tab", ImGuiTabBarFlags_NoTooltip)) {
 		if (ImGui::BeginTabItem("Location")) {
-			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
+				ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
 
-			CVarWrapper posXCvar = cvarManager->getCvar("flipready_positionx");
-			std::string posX = posXCvar.getStringValue();
-			CVarWrapper posYCvar = cvarManager->getCvar("flipready_positiony");
-			std::string posY = cvarManager->getCvar("flipready_positiony").getStringValue();
+			// Video resolution length and height
+			int resLen = ImGui::GetIO().DisplaySize.x;
+			int resHei = ImGui::GetIO().DisplaySize.y;
 
+			CVarWrapper xLocCvar = cvarManager->getCvar("flipready_positionx");
+			int xLoc = xLocCvar.getIntValue();
+			CVarWrapper yLocCvar = cvarManager->getCvar("flipready_positiony");
+			int yLoc = yLocCvar.getIntValue();
+
+			// Drag Mode
+			ImGui::Checkbox("Drag Mode", &inDragMode);
+			
+			if (inDragMode) {
+				ImGui::SetMouseCursor(2);
+				if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered() && ImGui::IsMouseDown(0)) {
+					ImVec2 mousePos = ImGui::GetMousePos();
+					xLocCvar.setValue(mousePos.x);
+					yLocCvar.setValue(mousePos.y);
+				}
+			}
+
+			// Horizontal Location
+			ImGui::PushID("xloc");
+			ImGui::TextUnformatted("Horizontal Position:");
+
+			ImGui::SameLine(lineupBars, 0.0f);
+			if (ImGui::SliderInt("##XLoc", &xLoc, 0, resLen, "%d")) {
+				xLocCvar.setValue(xLoc);
+			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponent = 1;
+
+			if (xLoc != frstyle_default.position_x) {
+				ImGui::SameLine(0.0f, 1.0f);
+				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+					xLocCvar.setValue(frstyle_default.position_x);
+				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip("Default: %d", frstyle_default.position_x);
+			}
+			if (xLoc != ref->position_x) {
+				ImGui::SameLine(0.0f, 2.0f);
+				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+					xLocCvar.setValue(ref->position_x);
+				}
+				if (ImGui::IsItemHovered()) {
+					ImGui::SetTooltip("Revert back to: %d", ref->position_x);
+				}
+			}
+			ImGui::PopID();
+
+			// Vertical Location
+			ImGui::PushID("yloc");
+			ImGui::TextUnformatted("Vertical Position:");
+
+			ImGui::SameLine(lineupBars, 0.0f);
+			if (ImGui::SliderInt("##YLoc", &yLoc, 0, resHei, "%d")) {
+				yLocCvar.setValue(yLoc);
+			}
+			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
+				displayComponent = 1;
+
+			if (yLoc != frstyle_default.position_y) {
+				ImGui::SameLine(0.0f, 1.0f);
+				if (ImGui::Button("RESET DEFAULT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+					yLocCvar.setValue(frstyle_default.position_y);
+				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip("Default: %d", frstyle_default.position_y);
+			}
+			if (yLoc != ref->position_y) {
+				ImGui::SameLine(0.0f, 2.0f);
+				if (ImGui::Button("REVERT", ImVec2(buttonSize, ImGui::GetFrameHeight()))) {
+					yLocCvar.setValue(ref->position_y);
+				}
+				if (ImGui::IsItemHovered()) {
+					ImGui::SetTooltip("Revert back to: %d", ref->position_y);
+				}
+			}
+			ImGui::PopID();
+
+			/*
 			// Top row
 			if (ImGui::Selectable("*##TL", posX == "left" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
 				posXCvar.setValue("left");
@@ -451,15 +519,13 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 				posXCvar.setValue("right");
 				posYCvar.setValue("bottom");
 			}
-
+			*/
 			ImGui::PopStyleVar();
 		}
 		ImGui::EndTabItem();
 	}
 	ImGui::EndTabBar();
 }
-
-*/
 
 std::string linearcolor2hex(LinearColor color) {
 	char res[16];

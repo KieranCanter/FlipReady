@@ -45,8 +45,8 @@ void FlipReady::onLoad()
 	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right].", true);
 	
 	// Positioning
-	cvarManager->registerCvar("flipready_positionx", "0", "Change horizontal position [0-resolution length].", true);
-	cvarManager->registerCvar("flipready_positiony", "0", "Change vertical position [0-resolution height].", true);
+	cvarManager->registerCvar("flipready_positionx", "200", "Change horizontal position [0-resolution length].", true);
+	cvarManager->registerCvar("flipready_positiony", "150", "Change vertical position [0-resolution height].", true);
 
 	// *** End Initialize Cvars *** //
 
@@ -56,107 +56,35 @@ void FlipReady::onLoad()
 	// Enable
 	cvarManager->getCvar("flipready_enabled").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 0 || cvar.getIntValue() > 1) {
+			LOG("Value ({}) not saved. Please enter one of [0|1]", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter one of [0|1]");
 		}
 	});
 
 	// Colors
-	// "Flip" Text
-	cvarManager->getCvar("flipready_color_fliptext").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		// Check for general hexcode match
-		std::regex generalPattern("^(\s*)#[a-fA-F0-9]{6}([a-fA-F0-9]{2})?(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), generalPattern)) {
-			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a valid hexcode value.");
-		}
-
-		// If not given alpha values in hexcode, automatically fill in as opaque
-		std::regex noAlphaPattern("^(\s*)#[a-fA-F0-9]{6}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), noAlphaPattern)) {
-			std::string newVal = cvar.getStringValue() + "FF";
-			cvar.setValue(newVal);
-		}
-
-		// If lowercase values are given, convert to uppercase
-		std::regex lowercasePattern("^(\s*)#[a-f0-9]{8}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), lowercasePattern)) {
-			std::string newVal = cvar.getStringValue();
-			std::transform(newVal.begin(), newVal.end(), newVal.begin(), ::toupper);
-			cvar.setValue(newVal);
-		}
-	});
-
-	// "No Flip" Text
-	cvarManager->getCvar("flipready_color_nofliptext").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		// Check for general hexcode match
-		std::regex generalPattern("^(\s*)#[a-fA-F0-9]{6}([a-fA-F0-9]{2})?(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), generalPattern)) {
-			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a valid hexcode value.");
-		}
-
-		// If not given alpha values in hexcode, automatically fill in as opaque
-		std::regex noAlphaPattern("^(\s*)#[a-fA-F0-9]{6}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), noAlphaPattern)) {
-			std::string newVal = cvar.getStringValue() + "FF";
-			cvar.setValue(newVal);
-		}
-
-		// If lowercase values are given, convert to uppercase
-		std::regex lowercasePattern("^(\s*)#[a-f0-9]{8}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), lowercasePattern)) {
-			std::string newVal = cvar.getStringValue();
-			std::transform(newVal.begin(), newVal.end(), newVal.begin(), ::toupper);
-			cvar.setValue(newVal);
-		}
-	});
-
-	// "Gauge Bar"
-	cvarManager->getCvar("flipready_color_gaugebar").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		// Check for general hexcode match
-		std::regex generalPattern("^(\s*)#[a-fA-F0-9]{6}([a-fA-F0-9]{2})?(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), generalPattern)) {
-			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a valid hexcode value.");
-		}
-
-		// If not given alpha values in hexcode, automatically fill in as opaque
-		std::regex noAlphaPattern("^(\s*)#[a-fA-F0-9]{6}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), noAlphaPattern)) {
-			std::string newVal = cvar.getStringValue() + "FF";
-			cvar.setValue(newVal);
-		}
-
-		// If lowercase values are given, convert to uppercase
-		std::regex lowercasePattern("^(\s*)#[a-f0-9]{8}(\s*)$");
-		if (std::regex_match(cvar.getStringValue(), lowercasePattern)) {
-			std::string newVal = cvar.getStringValue();
-			std::transform(newVal.begin(), newVal.end(), newVal.begin(), ::toupper);
-			cvar.setValue(newVal);
-		}
-	});
+	// CVarManager does a good enough job validating color inputs
+	// Too much regex required here - causes program to crash
 
 	// Sizes
 	// Font Size
 	cvarManager->getCvar("flipready_fontsize").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
+			LOG("Value ({}) not saved. Please enter a value between 1 and 100 (inclusive).", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a value between 1 and 100 (inclusive).");
 		}
 	});
 	// Bar Length
 	cvarManager->getCvar("flipready_barlen").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
+			LOG("Value ({}) not saved. Please enter a value between 1 and 100 (inclusive).", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a value between 1 and 100 (inclusive).");
 		}
 	});
 	// Bar Height
 	cvarManager->getCvar("flipready_barheight").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 25) {
+			LOG("Value ({}) not saved. Please enter a value between 1 and 25 (inclusive).", cvar.getIntValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a value between 1 and 25 (inclusive).");
 		}
 	});
 
@@ -164,8 +92,8 @@ void FlipReady::onLoad()
 	// Decay Direction
 	cvarManager->getCvar("flipready_decaydir").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "right") {
+			LOG("Value ({}) not saved. Please enter one of [left|right]", cvar.getStringValue());
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter one of [left|right]");
 		}
 	});
 
@@ -173,16 +101,16 @@ void FlipReady::onLoad()
 	// Horizontal Position
 	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this, resLen](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resLen) {
+			LOG("Value ({}) not saved. Please enter a value between 0 and {}.", cvar.getIntValue(), resLen);
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a value between 0 and {}.", resLen);
 		}
 	});
 
 	// Vertical Position
 	cvarManager->getCvar("flipready_positiony").addOnValueChanged([this, resHei](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resHei) {
+			LOG("Value ({}) not saved. Please enter a value between 0 and {}.", cvar.getIntValue(), resHei);
 			cvar.setValue(oldval);
-			LOG("Value not saved. Please enter a value between 0 and {}.", resHei);
 		}
 	});
 	
@@ -223,8 +151,8 @@ void FlipReady::Render(CanvasWrapper canvas)
 	float fontSize = cvarManager->getCvar("flipready_fontsize").getFloatValue();
 	float barLen = 10 * cvarManager->getCvar("flipready_barlen").getFloatValue();
 	float barHeight = 10 * cvarManager->getCvar("flipready_barheight").getFloatValue();
-	float posX = cvarManager->getCvar("flipready_positionx").getFloatValue();
-	float posY = cvarManager->getCvar("flipready_positiony").getFloatValue();
+	int posX = cvarManager->getCvar("flipready_positionx").getFloatValue();
+	int posY = cvarManager->getCvar("flipready_positiony").getFloatValue();
 	std::string decayDir = cvarManager->getCvar("flipready_decaydir").getStringValue();
 
 	// End Pre-Logic
