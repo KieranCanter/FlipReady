@@ -8,8 +8,8 @@ void ShowSizes(FRStyle* ref);
 void ShowLocation(FRStyle* ref);
 std::string linearcolor2hex(LinearColor color);
 
-
-const FRStyle frstyle_default = FRStyle{
+// Default Settings
+static FRStyle frstyle_default = FRStyle{
 	LinearColor{0, 255, 0, 255},
 	LinearColor{255, 0, 0, 255},
 	LinearColor{0, 255, 0, 255},
@@ -17,8 +17,8 @@ const FRStyle frstyle_default = FRStyle{
 	20.0f,
 	5.0f,
 	"left",
-	200,
-	150,
+	0,
+	0,
 };
 
 const float lineupBars = 130.0f;
@@ -26,8 +26,10 @@ const float buttonSize = 100.0f;
 bool inDragMode = false;
 
 void FlipReady::RenderSettings() {
+	frstyle_default.position_x = (int)(ImGui::GetIO().DisplaySize.x * 0.1);
+	frstyle_default.position_y = (int)(ImGui::GetIO().DisplaySize.y * 0.15);
 
-
+	// Saved Settings
 	static FRStyle frstyle= FRStyle{
 		cvarManager->getCvar("flipready_color_fliptext").getColorValue(),
 		cvarManager->getCvar("flipready_color_nofliptext").getColorValue(),
@@ -419,7 +421,7 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 			ImGui::TextUnformatted("Horizontal Position:");
 
 			ImGui::SameLine(lineupBars, 0.0f);
-			if (ImGui::SliderInt("##XLoc", &xLoc, 0, resLen, "%d")) {
+			if (ImGui::SliderInt("##XLoc", &xLoc, 0, resLen - 1, "%d")) {
 				xLocCvar.setValue(xLoc);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
@@ -449,7 +451,7 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 			ImGui::TextUnformatted("Vertical Position:");
 
 			ImGui::SameLine(lineupBars, 0.0f);
-			if (ImGui::SliderInt("##YLoc", &yLoc, 0, resHei, "%d")) {
+			if (ImGui::SliderInt("##YLoc", &yLoc, 0, resHei - 1, "%d")) {
 				yLocCvar.setValue(yLoc);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
@@ -474,52 +476,59 @@ void FlipReady::ShowLocation(FRStyle* ref) {
 			}
 			ImGui::PopID();
 
-			/*
-			// Top row
-			if (ImGui::Selectable("*##TL", posX == "left" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("left");
-				posYCvar.setValue("top");
+			/* TODO: ALIGNMENT TOOLS */
+
+			// Horizontal Alignment
+			ImGui::PushID("alignment");
+			ImGui::AlignTextToFramePadding();
+			ImGui::TextUnformatted("Alignment:");
+			ImGui::SameLine(lineupBars, 0.0f);
+
+			// Horizontal Alignment
+
+			// Align Left
+			if (ImGui::Button("L##Left", ImVec2(ImGui::GetFrameHeight(), 73))) {
+				xLoc = resLen * 0.1;
+				xLocCvar.setValue(xLoc);
 			}
 			ImGui::SameLine();
-			if (ImGui::Selectable("*##TM", posX == "middle" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posYCvar.setValue("top");
-				posXCvar.setValue("middle");
+			// Align Middle
+			if (ImGui::Button("M##MiddleHorz", ImVec2(ImGui::GetFrameHeight(), 73))) {
+				xLoc = resLen * 0.5;
+				xLocCvar.setValue(xLoc);
 			}
 			ImGui::SameLine();
-			if (ImGui::Selectable("*##TR", posX == "right" && posY == "top", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("right");
-				posYCvar.setValue("top");
+			//Align Right
+			if (ImGui::Button("R##Right", ImVec2(ImGui::GetFrameHeight(), 73))) {
+				xLoc = resLen * 0.9;
+				xLocCvar.setValue(xLoc);
+			}
+			ImGui::SameLine();
+
+			// Vertical Alignment
+			
+			ImGui::BeginGroup();
+			// Align Top
+			if (ImGui::Button("T##Top", ImVec2(75, ImGui::GetFrameHeight()))) {
+				yLoc = resHei * 0.15;
+				yLocCvar.setValue(yLoc);
 			}
 
-			// Middle row
-			if (ImGui::Selectable("*##ML", posX == "left" && posY == "middle", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("left");
-				posYCvar.setValue("middle");
+			ImGui::Spacing();
+			// Align Middle
+			if (ImGui::Button("M##MiddleVert", ImVec2(75, ImGui::GetFrameHeight()))) {
+				yLoc = resHei * 0.5;
+				yLocCvar.setValue(yLoc);
 			}
-			ImGui::SameLine();
-			ImGui::Selectable(" SELECT\nPOSITION", false, ImGuiSelectableFlags_Disabled, ImVec2(50, 50));
-			ImGui::SameLine();
-			if (ImGui::Selectable("*##MR", posX == "right" && posY == "middle", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("right");
-				posYCvar.setValue("middle");
+			ImGui::Spacing();
+			//Align Bottom
+			if (ImGui::Button("B##Bottom", ImVec2(75, ImGui::GetFrameHeight()))) {
+				yLoc = resHei * 0.8;
+				yLocCvar.setValue(yLoc);
 			}
+			ImGui::EndGroup();
+			ImGui::PopID();
 
-			// Bottom row
-			if (ImGui::Selectable("*##BL", posX == "left" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("left");
-				posYCvar.setValue("bottom");
-			}
-			ImGui::SameLine();
-			if (ImGui::Selectable("*##BM", posX == "middle" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posYCvar.setValue("bottom");
-				posXCvar.setValue("middle");
-			}
-			ImGui::SameLine();
-			if (ImGui::Selectable("*##BR", posX == "right" && posY == "bottom", ImGuiSelectableFlags_None, ImVec2(50, 50))) {
-				posXCvar.setValue("right");
-				posYCvar.setValue("bottom");
-			}
-			*/
 			ImGui::PopStyleVar();
 		}
 		ImGui::EndTabItem();

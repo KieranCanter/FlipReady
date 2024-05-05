@@ -4,10 +4,6 @@
 #include "bakkesmod/wrappers/Engine/WorldInfoWrapper.h"
 #include "utils/parser.h"
 
-#include <regex>
-#include <algorithm>
-
-
 BAKKESMOD_PLUGIN(FlipReady, "Flip ready indicator", plugin_version, PLUGINTYPE_FREEPLAY)
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
@@ -45,8 +41,8 @@ void FlipReady::onLoad()
 	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right].", true);
 	
 	// Positioning
-	cvarManager->registerCvar("flipready_positionx", "200", "Change horizontal position [0-resolution length].", true);
-	cvarManager->registerCvar("flipready_positiony", "150", "Change vertical position [0-resolution height].", true);
+	cvarManager->registerCvar("flipready_positionx", std::to_string(resLen * 0.1), "Change horizontal position [0-resolution length).", true);
+	cvarManager->registerCvar("flipready_positiony", std::to_string(resHei * 0.15), "Change vertical position [0-resolution height).", true);
 
 	// *** End Initialize Cvars *** //
 
@@ -69,21 +65,21 @@ void FlipReady::onLoad()
 	// Font Size
 	cvarManager->getCvar("flipready_fontsize").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
-			LOG("Value ({}) not saved. Please enter a value between 1 and 100 (inclusive).", cvar.getIntValue());
+			LOG("Value ({}) not saved. Please enter a value between [1-100].", cvar.getIntValue());
 			cvar.setValue(oldval);
 		}
 	});
 	// Bar Length
 	cvarManager->getCvar("flipready_barlen").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
-			LOG("Value ({}) not saved. Please enter a value between 1 and 100 (inclusive).", cvar.getIntValue());
+			LOG("Value ({}) not saved. Please enter a value between [1-100].", cvar.getIntValue());
 			cvar.setValue(oldval);
 		}
 	});
 	// Bar Height
 	cvarManager->getCvar("flipready_barheight").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 25) {
-			LOG("Value ({}) not saved. Please enter a value between 1 and 25 (inclusive).", cvar.getIntValue());
+			LOG("Value ({}) not saved. Please enter a value between [1-25].", cvar.getIntValue());
 			cvar.setValue(oldval);
 		}
 	});
@@ -101,7 +97,7 @@ void FlipReady::onLoad()
 	// Horizontal Position
 	cvarManager->getCvar("flipready_positionx").addOnValueChanged([this, resLen](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resLen) {
-			LOG("Value ({}) not saved. Please enter a value between 0 and {}.", cvar.getIntValue(), resLen);
+			LOG("Value ({}) not saved. Please enter a value between [0-{}).", cvar.getIntValue(), resLen);
 			cvar.setValue(oldval);
 		}
 	});
@@ -109,7 +105,7 @@ void FlipReady::onLoad()
 	// Vertical Position
 	cvarManager->getCvar("flipready_positiony").addOnValueChanged([this, resHei](std::string oldval, CVarWrapper cvar) {
 		if (cvar.getIntValue() < 0 || cvar.getIntValue() > resHei) {
-			LOG("Value ({}) not saved. Please enter a value between 0 and {}.", cvar.getIntValue(), resHei);
+			LOG("Value ({}) not saved. Please enter a value between [0-{}).", cvar.getIntValue(), resHei);
 			cvar.setValue(oldval);
 		}
 	});
