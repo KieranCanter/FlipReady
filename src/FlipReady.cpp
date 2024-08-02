@@ -38,7 +38,7 @@ void FlipReady::onLoad()
 	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true);
 	
 	// Gauge Bar Options
-	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right].", true);
+	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right|down|up|h_collapse|v_collapse].", true);
 	
 	// Positioning
 	cvarManager->registerCvar("flipready_positionx", std::to_string(resLen * 0.1), "Change horizontal position [0-resolution length).", true);
@@ -87,7 +87,9 @@ void FlipReady::onLoad()
 	// Gauge Bar Options
 	// Decay Direction
 	cvarManager->getCvar("flipready_decaydir").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "right") {
+		if (cvar.getStringValue() != "left" && cvar.getStringValue() != "right"
+			&& cvar.getStringValue() != "down" && cvar.getStringValue() != "up"
+			&& cvar.getStringValue() != "h_collapse" && cvar.getStringValue() != "v_collapse") {
 			LOG("Value ({}) not saved. Please enter one of [left|right]", cvar.getStringValue());
 			cvar.setValue(oldval);
 		}
@@ -171,20 +173,13 @@ void FlipReady::Render(CanvasWrapper canvas)
 	bool hasFlip = car.HasFlip();
 	unsigned long jumped = car.GetbJumped();
 	
-	// Car doesn't have flip
+	// Car doesn't have flip - is in air
 	if ((!car.HasFlip() && displayComponent != 3 && displayComponent != 1) || displayComponent == 2) {
 		flip_str = "NO FLIP";
 
 		// Positioning
 		posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
 		posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
-		
-		/* Alignments for future use?
-		Align Left:		posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
-		Align Right:	posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
-		Align Top:		posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
-		Align Bottom:	posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
-		*/
 
 		canvas.SetColor(colorNoFlipText);
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
@@ -196,13 +191,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 		// Positioning
 		posX -= barLen * 0.5;
 		posY -= barHeight * 0.5;
-		
-		/* Alignments for future use?
-		Align Left:		posx += barLen;
-		Align Right:	posX -= barLen;
-		Align Top:		posY += barHeight;	
-		Align Bottom:	posY -= barHeight;
-		*/
 
 		canvas.SetColor(colorGaugeBar);					
 
@@ -211,24 +199,41 @@ void FlipReady::Render(CanvasWrapper canvas)
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawBox(Vector2{ int(barLen), int(barHeight) });
 		
+		// TODO: implement for h_collapse, and v_collapse
 		if (displayComponent != 3) {
 			if (decayDir == "left") {
 				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
 			}
-			else {
+			else if (decayDir == "right") {
 				posX += barLen * ((realTime - timer) / 1.5);
 				canvas.SetPosition(Vector2{ int(posX), int(posY) });
 				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+			}
+			else if (decayDir == "down") {
+				posY += barHeight * ((realTime - timer) / 1.5);
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight * (deltaTime / 1.5)) });
+			}
+			else if (decayDir == "up") {
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight * (deltaTime / 1.5)) });
 			}
 		}
 		else {
 			if (decayDir == "left") {
 				canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
 			}
-			else {
+			else if (decayDir == "right") {
 				posX += barLen / 2;
 				canvas.SetPosition(Vector2{ int(posX), int(posY) });
 				canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
+			}
+			else if (decayDir == "down") {
+				posY += barHeight / 2;
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 2) });
+			}
+			else if (decayDir == "up") {
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 2) });
 			}
 		}
 	}
@@ -239,13 +244,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 		// Positioning
 			posX -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5;
 			posY -= canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5;
-		
-		/* Alignments for future use?
-			Align Left:		posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) + (barLen * 0.5);
-			Align Right:	posX = posX - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).X * 0.5) - (barLen * 0.5);
-			Align Top:		posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) + (barHeight * 0.5);
-			Align Bottom:	posY = posY - (canvas.GetStringSize(flip_str, exactFontSize, exactFontSize).Y * 0.5) - (barHeight * 0.5);
-		*/		
 
 		canvas.SetColor(colorFlipText);					
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
