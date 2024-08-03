@@ -384,14 +384,22 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 					if (ImGui::Selectable(directions[i], is_selected, ImGuiSelectableFlags_None)) {
 						decayCvar.setValue(dir_cvars[i]);
 						dir_curr_idx = i;
-						displayComponent = 3;
 					}
 
 					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();
+
+					if (ImGui::IsItemHovered()) {
+						decayCvar.setValue(dir_cvars[i]);
+						dir_curr_idx = i;
+						displayComponent = 3;
+					}
 				}
 				ImGui::EndCombo();
+			}
+			if (ImGui::IsItemHovered()) {
+				displayComponent = 3;
 			}
 
 			ImGui::PopStyleVar();
