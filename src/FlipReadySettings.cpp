@@ -335,7 +335,7 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			ImGui::TextUnformatted("Gauge Bar Height:");
 
 			ImGui::SameLine(lineupBars, 0.0f);
-			if (ImGui::SliderFloat("##BarHeight", &barHeight, 1.0f, 25.0f, "%.1f", 1.0f)) {
+			if (ImGui::SliderFloat("##BarHeight", &barHeight, 1.0f, 100.0f, "%.1f", 1.0f)) {
 				barHeightCvar.setValue(barHeight);
 			}
 			if (ImGui::IsItemHovered() || ImGui::IsItemActive())
