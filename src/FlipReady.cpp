@@ -217,6 +217,19 @@ void FlipReady::Render(CanvasWrapper canvas)
 			else if (decayDir == "up") {
 				canvas.FillBox(Vector2{ int(barLen), int(barHeight * (deltaTime / 1.5)) });
 			}
+			else if (decayDir == "h_collapse") {
+				posX += barLen * 0.5 * ((realTime - timer) / 1.5);
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+			}
+			else if (decayDir == "v_collapse") {
+				posY += barHeight * 0.5 * ((realTime - timer) / 1.5);
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight * (deltaTime / 1.5)) });
+			}
+			else {
+				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
+			}
 		}
 		else {
 			if (decayDir == "left") {
@@ -234,6 +247,16 @@ void FlipReady::Render(CanvasWrapper canvas)
 			}
 			else if (decayDir == "up") {
 				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 2) });
+			}
+			else if (decayDir == "h_collapse") {
+				posX += barLen / 4;
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen / 4), int(barHeight) });
+			}
+			else if (decayDir == "v_collapse") {
+				posY += barHeight / 4;
+				canvas.SetPosition(Vector2{ int(posX), int(posY) });
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 4) });
 			}
 		}
 	}
