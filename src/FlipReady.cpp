@@ -35,7 +35,7 @@ void FlipReady::onLoad()
 	// Sizes
 	cvarManager->registerCvar("flipready_fontsize", "20", "Change fontsize [1-100].", true);
 	cvarManager->registerCvar("flipready_barlen", "20", "Change gauge bar length [1-100].", true);
-	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-25].", true);
+	cvarManager->registerCvar("flipready_barheight", "5", "Change gauge bar height [1-100].", true);
 	
 	// Gauge Bar Options
 	cvarManager->registerCvar("flipready_decaydir", "left", "Change direction of gauge bar decay [left|right|down|up|h_collapse|v_collapse].", true);
@@ -78,7 +78,7 @@ void FlipReady::onLoad()
 	});
 	// Bar Height
 	cvarManager->getCvar("flipready_barheight").addOnValueChanged([this](std::string oldval, CVarWrapper cvar) {
-		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 25) {
+		if (cvar.getIntValue() < 1 || cvar.getIntValue() > 100) {
 			LOG("Value ({}) not saved. Please enter a value between [1-25].", cvar.getIntValue());
 			cvar.setValue(oldval);
 		}
@@ -199,7 +199,6 @@ void FlipReady::Render(CanvasWrapper canvas)
 		canvas.SetPosition(Vector2{ int(posX), int(posY) });
 		canvas.DrawBox(Vector2{ int(barLen), int(barHeight) });
 		
-		// TODO: implement for h_collapse, and v_collapse
 		if (displayComponent != 3) {
 			if (decayDir == "left") {
 				canvas.FillBox(Vector2{ int(barLen * (deltaTime / 1.5)), int(barHeight) });
