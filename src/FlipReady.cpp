@@ -250,12 +250,12 @@ void FlipReady::Render(CanvasWrapper canvas)
 			else if (decayDir == "h_collapse") {
 				posX += barLen / 4;
 				canvas.SetPosition(Vector2{ int(posX), int(posY) });
-				canvas.FillBox(Vector2{ int(barLen / 4), int(barHeight) });
+				canvas.FillBox(Vector2{ int(barLen / 2), int(barHeight) });
 			}
 			else if (decayDir == "v_collapse") {
 				posY += barHeight / 4;
 				canvas.SetPosition(Vector2{ int(posX), int(posY) });
-				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 4) });
+				canvas.FillBox(Vector2{ int(barLen), int(barHeight / 2) });
 			}
 		}
 	}
