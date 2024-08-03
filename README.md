@@ -3,9 +3,10 @@
 </p>
 
 # TODO:
-* Free positioning Changes
-* Decay directions
-* Vertical sizing adjustment
+* Screenshot images and record clips for new additions:
+  * Free positioning
+  * Decay Directions
+  * Vertical size increase
 
 # Introduction
 
@@ -13,9 +14,9 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 
 *Due to the unfairness/imbalance this can cause in competitive play, this plugin is only active within freeplay/exhibition game modes.*
 
-<p align="center">
+<div align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/373de1ed-5877-46d0-be32-822accfd42f5" alt="Intro Demo" width="1000" />
-</p>
+</div>
 
 # Installation
 
@@ -28,9 +29,10 @@ FlipReady is a BakkesMod plugin for Rocket League. Enabling the plugin will disp
 
 The settings can be accessed through `F2 > Plugins > FlipReady`. The current customizable settings include colors, sizes, and location of the element. Once altered, buttons will appear to reset the value to default or revert back to the last saved value. Hovering over these buttons will show what the value will be reset/reverted to. Default values can also be seen in the [Commands](#commands) section. Hovering over or selecting a specific setting will display the appropriate element (e.g. the gauge bar will be shown when adjusting gauge bar length).
 
-<p align="center">
+<h1 align="center">
+  Replace Image with Updated Settings
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c7d49e4e-761c-42c8-88de-7e11f166ef7b" alt="Settings Window" />
-</p>
+</h1>
 
 ## Colors
 
@@ -48,26 +50,25 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 
 * Like colors, the sizes of the "flip" and "no flip" texts, as well as the gauge bar, can be adjusted.
 * Drag the sliders to scrub through values or ctrl+click to manually type a value.
-* Direction of growth depends on location of element (e.g. element aligned to the left will grow to the right, element aligned to the bottom will grow up).
+* Elements always remain centered with reference to one another and will grow anchored in the center.
 * Decay direction effects the direction in which the bar will empty.
 
-<p align="center">
+<h1 align="center">
+  Replace Images with Updated Settings
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/5a12e941-e796-47cf-bb12-b789b30eb6e5" alt="Sizes" width="900"/>
-</p>
-
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/c36d5ff9-a155-402b-8f22-d87dbb038744" alt="Decay Left" width="400" />
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/cf9802bf-5638-4e83-afab-f842a50870f7" alt="Decay Right" width="400" /> 
-</p>
+</h1>
 
 ## Location
 
 * The location of the element can be changed by simply clicking on the desired position. Certain locations are offset to accommodate interface features like the boost meter and ball cam indicator.
 * As stated previously, location affects the direction of growth when resizing.
 
-<p align="center">
+<h1 align="center">
+  Replace Image with Updated Settings
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/8235fc72-6b97-420c-8dc9-2d1d574a5b49" alt="Sizes" width="900"/>
-</p>
+</h1>
 
 ## Save/Reset Settings
 
@@ -85,50 +86,42 @@ The settings can be accessed through `F2 > Plugins > FlipReady`. The current cus
 
 Settings are found in the F2 settings window; however, you may also use the following commands in the F6 console $\color{#87D687}\textsf{(default values in green)}$:
 
-| Command                    | Arguments                                              | Effect                                            |
-| -------------------------- | ------------------------------------------------------ | ------------------------------------------------- |
-| flipready_enabled          | [ 0\| $\color{#87D687}\textsf{1}$ ]                  | [ Disable plugin\| Enable plugin]                 |
-| flipready_color_fliptext   | [$\color{#87D687}\texttt{\\#00FF00FF}$ ]             | [ Change "flip" text color with RGBA hexcode ]    |
-| flipready_color_nofliptext | [$\color{#87D687}\texttt{\\#FF0000FF}$ ]             | [ Change "no flip" text color with RGBA hexcode ] |
-| flipready_color_gaugebar   | [$\color{#87D687}\texttt{\\#00FF00FF}$ ]             | [ Change gauge bar color with RGBA hexcode ]      |
-| flipready_fontsize         | [ 1 -$\color{#87D687}\textsf{20}$ - 100 ]            | [ Change font size ]                              |
-| flipready_barlen           | [ 1 -$\color{#87D687}\textsf{20}$ - 100 ]            | [ Change gauge bar length ]                       |
-| flipready_barheight        | [ 1 -$\color{#87D687}\textsf{5}$ - 25 ]              | [ Change gauge bar height ]                       |
-| flipready_decaydir         | [$\color{#87D687}\textsf{left}$ \| right ]           | [ Change direction gauge bar decays ]             |
-| flipready_positionx        | [ left\| $\color{#87D687}\textsf{middle}$ \| right ] | [ Change horizontal position ]                    |
-| flipready_positiony        | [$\color{#87D687}\textsf{top}$ \| middle \| bottom ] | [ Change vertical position ]                      |
+| Command                    | Arguments                                                                             | Effect                                            |
+| -------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| flipready_enabled          | [ 0 \| $\color{#87D687}\textsf{1}$ ]                                                  | [ Disable plugin\| Enable plugin]                 |
+| flipready_color_fliptext   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]                                             | [ Change "flip" text color with RGBA hexcode ]    |
+| flipready_color_nofliptext | [ $\color{#87D687}\texttt{\\#FF0000FF}$ ]                                             | [ Change "no flip" text color with RGBA hexcode ] |
+| flipready_color_gaugebar   | [ $\color{#87D687}\texttt{\\#00FF00FF}$ ]                                             | [ Change gauge bar color with RGBA hexcode ]      |
+| flipready_fontsize         | [ 1 - $\color{#87D687}\textsf{20}$ - 100 ]                                            | [ Change font size ]                              |
+| flipready_barlen           | [ 1 - $\color{#87D687}\textsf{20}$ - 100 ]                                            | [ Change gauge bar length ]                       |
+| flipready_barheight        | [ 1 - $\color{#87D687}\textsf{5}$ - 100 ]                                             | [ Change gauge bar height ]                       |
+| flipready_decaydir         | [ $\color{#87D687}\textsf{left}$ \| right \| down \| up \| h_collapse \| v_collapse ] | [ Change direction gauge bar decays ]             |
+| flipready_positionx        | [ 0 - \<$\color{#87D687}\textsf{res length * 0.1}$\> - \<res length\> ]               | [ Change horizontal position ]                    |
+| flipready_positiony        | [ 0 - \<$\color{#87D687}\textsf{res height * 0.15}$\> - \<res height\> ]              | [ Change vertical position ]                      |
 
-**Example:** If I want to make the "flip" text blue, change the font size to 25, and set the horizontal position to the left, I would type into the F6 console:
-`flipready_color_fliptext #0000FFFF`
-`flipready_fontsize 25`
-`flipready_positionx left`
+**Example:** If I want to make the "flip" text blue, change the font size to 25, and set the decay direction to horizontal collapse, I would type into the F6 console:
+```
+flipready_color_fliptext #0000FFFF
+flipready_fontsize 25
+flipready_decaydir h_collapse
+```
 
 # Demos
 
-<p align="center">
-  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/04734723-f65c-4697-a742-f6323f8b36d7" alt="Demo 1" width="1000" /> 
-</p>
+<h1 align="center">
+  Replace with Some Updated Clips
 
-<p align="center">
+  <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/04734723-f65c-4697-a742-f6323f8b36d7" alt="Demo 1" width="1000" />
+
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b3ab8b8a-a10a-4209-b0b3-fcb3376c6591" alt="Demo 2" width="1000" /> 
-</p>
 
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/45a2bc78-902c-4264-9b56-c314603bdf4f" alt="Demo 3" width="1000" /> 
-</p>
 
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/ba625c6b-ceb7-45c2-be5a-99f5634a0078" alt="Demo 4" width="1000" /> 
-</p>
 
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b44ef60f-afc4-41d8-be63-5b7d3640dd10" alt="Demo 5" width="1000" /> 
-</p>
 
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/b6eea98e-20a0-48db-a606-11b42a473e25" alt="Demo 6" width="1000" /> 
-</p>
 
-<p align="center">
   <img src="https://github.com/KieranCanter/FlipReady/assets/74733079/fca84cff-213a-4544-a371-7bfbd1b82be8" alt="Demo 7" width="1000" /> 
-</p>
+</h1>
