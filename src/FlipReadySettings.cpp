@@ -369,17 +369,30 @@ void FlipReady::ShowSizes(FRStyle* ref) {
 			ImGui::SameLine(lineupBars + 50.0f, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2{ 0.5, 0.5 });
 
-			if (ImGui::Selectable("LEFT", decay == "left", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
-				decayCvar.setValue("left");
-			if (ImGui::IsItemHovered())
-				displayComponent = 3;
+			const char* directions[] = { "LEFT", "RIGHT", "DOWN", "UP", "HORIZONTAL COLLAPSE", "VERTICAL COLLAPSE" };
+			const char* dir_cvars[] = { "left", "right", "down", "up", "h_collapse", "v_collapse" };
+			static int dir_curr_idx = 0;
+			const char* preview_value = directions[dir_curr_idx];
 
-			ImGui::SameLine(0.0f, 10.0f);
+			// Directions Combo Box
+			ImGui::SetNextItemWidth(200.0f);
+			if (ImGui::BeginCombo("##DecayDirection", preview_value, ImGuiComboFlags_None))
+			{
+				for (int i = 0; i < IM_ARRAYSIZE(directions); i++)
+				{
+					const bool is_selected = (dir_curr_idx == i);
+					if (ImGui::Selectable(directions[i], is_selected, ImGuiSelectableFlags_None)) {
+						decayCvar.setValue(dir_cvars[i]);
+						dir_curr_idx = i;
+						displayComponent = 3;
+					}
 
-			if (ImGui::Selectable("RIGHT", decay == "right", ImGuiSelectableFlags_None, ImVec2(100, ImGui::GetFrameHeight())))
-				decayCvar.setValue("right");
-			if (ImGui::IsItemHovered())
-				displayComponent = 3;
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
 
 			ImGui::PopStyleVar();
 			ImGui::PopID();
