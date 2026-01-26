@@ -14,11 +14,9 @@ void FlipReady::onLoad()
 	_globalCvarManager = cvarManager;
 	LOG("FlipReady loaded");
 
-	std::string resStr = SettingsWrapper().GetVideoSettings().Resolution;
-	std::string resStrLen = resStr.substr(0, resStr.find("x"));
-	std::string resStrHei = resStr.substr(resStr.find("x") + 1, resStr.length());
-	int resLen = std::stoi(resStrLen);
-	int resHei = std::stoi(resStrHei);
+	Vector2 resVect = gameWrapper->GetScreenSize();
+	int resLen = resVect.X;
+	int resHei = resVect.Y;
 
 	gameWrapper->LoadToastTexture("fr_logo", gameWrapper->GetDataFolder() / "fr_logo_short_square.png");
 
@@ -257,5 +255,6 @@ void ShowSave(FRStyle* ref) {}
 void ShowColors(FRStyle* ref) {}
 
 void ShowSizes(FRStyle* ref) {}
+
 
 void ShowLocation(FRStyle* ref) {}
